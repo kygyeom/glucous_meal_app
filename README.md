@@ -93,17 +93,6 @@ flutter run -d linux   # 또는 chrome / android 등
 
 ---
 
-## 📂 폴더 구조
-
-```plaintext
-glucous_meal_app/
-├── lib/
-│   ├── screens/        # 화면 UI
-│   ├── models/         # 데이터 모델 정의
-│   └── services/       # API 통신 로직
-├── server/             # FastAPI 백엔드
-└── README.md
-```
 
 ---
 
