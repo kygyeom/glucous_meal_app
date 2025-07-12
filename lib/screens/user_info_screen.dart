@@ -19,7 +19,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   String activityLevel = '중간';
   String diabetes = '없음';
   String goal = '혈당 안정';
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +93,15 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const LifestyleScreen(),
+                        builder: (context) => LifestyleScreen(
+                          age: age!,
+                          gender: gender,
+                          height: height!,
+                          weight: weight!,
+                          activityLevel: activityLevel,
+                          diabetes: diabetes,
+                          goal: goal,
+                        ),
                       ),
                     );
                   }

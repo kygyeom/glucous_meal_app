@@ -1,52 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:glucous_meal_app/models/models.dart';
+import 'package:glucous_meal_app/services/api_service.dart';
 import 'meal_detail_screen.dart';
 
-class MealRecommendationScreen extends StatelessWidget {
-  const MealRecommendationScreen({super.key});
+class MealRecommendationScreen extends StatefulWidget {
+  final UserProfile userProfile;
 
-  final List<Map<String, dynamic>> mockMeals = const [
-    {
-      'name': '닭가슴살 샐러드',
-      'description': '고단백 + 저탄수화물',
-      'image': 'https://via.placeholder.com/150',
-    },
-    {
-      'name': '귀리 현미밥과 생선구이',
-      'description': '혈당 안정에 좋은 전통식',
-      'image': 'https://via.placeholder.com/150',
-    },
-    {
-      'name': '두부 버섯 스튜',
-      'description': '채식 기반 저혈당 식단',
-      'image': 'https://via.placeholder.com/150',
-    },
-  ];
+  const MealRecommendationScreen({super.key, required this.userProfile});
+
+  @override
+  State<MealRecommendationScreen> createState() => _MealRecommendationScreenState();
+}
+
+class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
+  late Future<List<Recommendation>> futureRecommendations;
+
+  @override
+  void initState() {
+    super.initState();
+    futureRecommendations = fetchRecommendations(widget.userProfile);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('추천 식사 목록')),
-      body: ListView.builder(
-        itemCount: mockMeals.length,
-        itemBuilder: (context, index) {
-          final meal = mockMeals[index];
-          return Card(
-            margin: const EdgeInsets.all(12),
-            child: ListTile(
-              leading: Image.network(meal['image'], width: 60, height: 60),
-              title: Text(meal['name']),
-              subtitle: Text(meal['description']),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => MealDetailScreen(mealName: meal['name']),
-                  ),
+      appBar: AppBar(title: const Text('추천 식단')),
+      body: FutureBuilder<List<Recommendation>>(
+        future: futureRecommendations,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('에러 발생: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('추천 식단이 없습니다.'));
+          } else {
+            final recommendations = snapshot.data!;
+            return ListView.builder(
+              itemCount: recommendations.length,
+              itemBuilder: (context, index) {
+                final rec = recommendations[index];
+                return ListTile(
+                  title: Text(rec.foodName),
+                  subtitle: Text('탄수화물: ${rec.nutrition['carbs']}g / 예상 혈당 영향: ${rec.expectedGlucoseImpact}'),
+                  trailing: Text(rec.foodGroup),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MealDetailScreen(
+                          foodName: rec.foodName,
+                          foodGroup: rec.foodGroup,
+                          glucoseImpact: rec.expectedGlucoseImpact,
+                          nutrition: rec.nutrition,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
-            ),
-          );
+            );
+          }
         },
       ),
     );
