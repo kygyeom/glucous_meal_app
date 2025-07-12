@@ -1,5 +1,4 @@
-좋아요! 아래는 플러터 설치 방법, 폴더 구조, 앱 & 서버 실행 방법을 모두 포함한 `README.md` 템플릿입니다. 초보자도 이해할 수 있도록 친절하게 작성했어요.
-
+컨셉 디자인 figma (https://www.figma.com/design/26EEnOW4y2Eqd6I7xd2FIx/GLucoUS-APP?node-id=206-6907&t=Oqv17ITUCPH2n2Pi-1)
 ---
 
 # 🥗 GlucoUS Meal Recommendation App
