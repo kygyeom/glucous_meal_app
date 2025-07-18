@@ -4,6 +4,7 @@ import 'user_info_screen.dart';
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
