@@ -1,6 +1,8 @@
 class UserProfile {
   final int age;
   final String gender;
+  final double weight;
+  final double height;
   final double bmi;
   final String activityLevel;
   final String goal;
@@ -13,6 +15,8 @@ class UserProfile {
   UserProfile({
     required this.age,
     required this.gender,
+    required this.weight,
+    required this.height,
     required this.bmi,
     required this.activityLevel,
     required this.goal,
@@ -27,6 +31,8 @@ class UserProfile {
     return {
       "age": age,
       "gender": gender,
+      "weight": weight,
+      "height": height,
       "bmi": bmi,
       "activity_level": activityLevel,
       "goal": goal,
@@ -38,10 +44,12 @@ class UserProfile {
     };
   }
 
-  factory UserProfile.fromJson(Map<String, dynamic> json) {
+factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
       age: json['age'],
       gender: json['gender'],
+      weight: json['weight'],
+      height: json['height'],
       bmi: json['bmi'],
       activityLevel: json['activity_level'],
       goal: json['goal'],

@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Dict
+import joblib
 import numpy as np
 import pandas as pd
 import scipy
@@ -11,6 +12,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.base import BaseEstimator
 
 from DataLoader import select_similar_features
+from preprocess import Normalizer, idx_to_category
 
 
 FOOD_CATEGORIES = ['과일군', '곡류군', '혼합식품', '어육류군', '우유군', '채소군', '지방군']
@@ -90,7 +92,7 @@ class BM25CosSim():
         self,
         K1: float = 3.95,
         B: float = 0.2,
-        sim_keys: List[str] = ['Age', 'Gender', 'BMI', 'Body weight ', 'Height '],
+        sim_features: List[str] = ['Age', 'Gender', 'BMI', 'Body weight ', 'Height '],
         key_x: str = 'patient_id',
         key_y: str = '식품군분류',
         normalize: bool = True,
@@ -100,7 +102,7 @@ class BM25CosSim():
         self.base_df = None
         self.K1 = K1
         self.B = B
-        self.sim_keys = sim_keys
+        self.sim_features= sim_features
         self.key_x = key_x
         self.key_y = key_y
         self.normalize = normalize
@@ -137,10 +139,11 @@ class BM25CosSim():
         y=None
     ):
 
-        self.bm25_weight = self.__bm25_weight(train_df, self.key_x, self.key_y)
+        self.bm25_weight = self.__bm25_weight(train_df)
+
         self.base_df = select_similar_features(
             train_df,
-            keys=self.sim_keys,
+            keys=self.sim_features,
         )
 
         if self.normalize:
@@ -152,7 +155,6 @@ class BM25CosSim():
     ):
 
         # Preprocess X
-        X = X[self.sim_keys]
         if self.normalize:
             X = self.normalize_df(self.base_df, X)
 
@@ -166,9 +168,7 @@ class BM25CosSim():
         recommendations = {}
         for idx, value in enumerate(X.index):
             sorted_recommendations = score_pred[idx].argsort()[::-1]
-            recommendations[value] = sorted_recommend
-
-        recommendations = pd.DataFrame(recommendations, columns=['patient_id', 'food_id'])
+            recommendations[value] = sorted_recommendations
 
         return recommendations
 
@@ -185,8 +185,9 @@ class BM25CosSim():
 
         return converted_df
 
+
     @staticmethod
-    def recallK(
+    def recall_at_K(
         y_pred: dict,
         y: dict,
         K: int = 3,
@@ -200,7 +201,6 @@ class BM25CosSim():
         for key, value in y.items():
             pred = y_pred[key][:K]
             gt = y[key][:K]
-
             correct_size = correct_size + count_common_elements(pred, gt)
 
         return correct_size / pred_size
@@ -212,7 +212,7 @@ class BM25CosSimLMF(BaseEstimator):
         self,
         K1: float = 3.95,
         B: float = 0.2,
-        sim_keys: List[str] = ['Age', 'Gender', 'BMI', 'Body weight ', 'Height '],
+        sim_features: List[str] = ['Age', 'Gender', 'BMI', 'Body weight ', 'Height '],
         key_x: str = 'patient_id',
         key_y: str = '식품군분류',
         normalize: bool = True,
@@ -234,7 +234,7 @@ class BM25CosSimLMF(BaseEstimator):
         self.model_BM25CosSim = BM25CosSim(
             K1=K1,
             B=B,
-            sim_keys=sim_keys,
+            sim_features=sim_features,
             key_x=key_x,
             key_y=key_y,
         )
@@ -258,3 +258,32 @@ class BM25CosSimLMF(BaseEstimator):
     ):
 
         self.model_BM25CosSim.predict(X)
+
+
+def save_model_normalizer(path: str, model, normalizer):
+    with open(path, 'wb') as file:
+        joblib.dump(
+            {'model': model, 'normalizer': normalizer},
+            file
+        )
+
+
+def load_model_normalizer(path: str):
+    with open(path, 'rb') as file:
+        data = joblib.load(file)
+    model = data['model']
+    normalizer = data['normalizer']
+    return model, normalizer
+
+
+def predict_dict(
+    user_dict: Dict[str, int],
+    model,
+    normalizer,
+):
+    user_df = pd.DataFrame(user_dict, index=[0])
+    user_df = user_df.set_index('patient_id')
+    user_df = normalizer.transform(user_df)
+    recommend = model.predict(user_df)
+    recommend = idx_to_category(recommend)
+    return recommend
