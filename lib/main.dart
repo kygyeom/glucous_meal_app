@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/onboarding_screen.dart';
+import 'screens/login_screen.dart';
 
 void main() {
   runApp(const GlucoUSApp());
@@ -13,10 +14,7 @@ class GlucoUSApp extends StatelessWidget {
     return MaterialApp(
       title: 'GlucoUS',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-        fontFamily: 'NotoSans',
-      ),
+      theme: ThemeData(primarySwatch: Colors.teal, fontFamily: 'NotoSans'),
       home: const OnboardingScreen(),
     );
   }
