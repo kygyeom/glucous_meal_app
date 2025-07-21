@@ -299,18 +299,18 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
       activityLevel: widget.activityLevel == '낮음'
           ? 'low'
           : widget.activityLevel == '높음'
-          ? 'high'
-          : 'medium',
+              ? 'high'
+              : 'medium',
       goal: widget.goal == '체중 감량'
           ? 'weight_loss'
           : widget.goal == '균형 잡힌 식단'
-          ? 'balanced'
-          : 'blood_sugar_control',
+              ? 'balanced'
+              : 'blood_sugar_control',
       diabetes: widget.diabetes == '없음'
           ? 'none'
           : widget.diabetes == '제1형 당뇨'
-          ? 'type1'
-          : 'type2',
+              ? 'type1'
+              : 'type2',
       meals: selectedMeals,
       mealMethod: selectedMealMethod,
       dietaryRestrictions: selectedRestrictions,
@@ -337,7 +337,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFFE6F1FB) : Colors.white,
+          color: selected ? const Color(0xFFE6F1FB) : const Color(0xFFF4F4F4),
           border: Border.all(
             color: selected ? const Color(0xFF5DADE2) : Colors.grey.shade300,
           ),
@@ -374,7 +374,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 8),
@@ -394,7 +394,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
                   child: Container(
                     height: 8,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2980B9),
+                      color: Colors.black,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -410,7 +410,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF4F4F4),
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -486,10 +486,10 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
                         emoji: item == 'Vegetarian'
                             ? '🥕'
                             : item == 'Halal'
-                            ? '🐓'
-                            : item == 'Gluten-free'
-                            ? '🌾'
-                            : '❌',
+                                ? '🐓'
+                                : item == 'Gluten-free'
+                                    ? '🌾'
+                                    : '❌',
                         selected: selectedRestrictions.contains(item),
                         onTap: () => toggleRestriction(item),
                       ),
@@ -529,7 +529,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
                 child: ElevatedButton(
                   onPressed: agreedToTerms ? submitData : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2980B9),
+                    backgroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),

@@ -381,7 +381,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 8),
@@ -401,7 +401,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   child: Container(
                     height: 8,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2980B9),
+                      color: Colors.black,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -459,12 +459,10 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         margin: const EdgeInsets.symmetric(horizontal: 4),
                         decoration: BoxDecoration(
                           color: selected
-                              ? const Color(0xFFE6F1FB)
+                              ? const Color(0xFFF4F4F4)
                               : Colors.grey[200],
                           border: Border.all(
-                            color: selected
-                                ? const Color(0xFF5DADE2)
-                                : Colors.transparent,
+                            color: selected ? Colors.black : Colors.transparent,
                           ),
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -472,9 +470,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           child: Text(
                             option,
                             style: TextStyle(
-                              color: selected
-                                  ? const Color(0xFF2980B9)
-                                  : Colors.black,
+                              color: selected ? Colors.black : Colors.black,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -507,9 +503,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     label: Text(option),
                     selected: selected,
                     onSelected: (_) => setState(() => activityLevel = option),
-                    selectedColor: const Color(0xFFE6F1FB),
+                    selectedColor: const Color(0xFFF4F4F4),
                     labelStyle: TextStyle(
-                      color: selected ? const Color(0xFF2980B9) : Colors.black,
+                      color: selected ? Colors.black : Colors.black,
                     ),
                   );
                 }).toList(),
@@ -525,9 +521,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     label: Text(option),
                     selected: selected,
                     onSelected: (_) => setState(() => diabetes = option),
-                    selectedColor: const Color(0xFFE6F1FB),
+                    selectedColor: const Color(0xFFF4F4F4),
                     labelStyle: TextStyle(
-                      color: selected ? const Color(0xFF2980B9) : Colors.black,
+                      color: selected ? Colors.black : Colors.black,
                     ),
                   );
                 }).toList(),
@@ -543,9 +539,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     label: Text(option),
                     selected: selected,
                     onSelected: (_) => setState(() => goal = option),
-                    selectedColor: const Color(0xFFE6F1FB),
+                    selectedColor: const Color(0xFFF4F4F4),
                     labelStyle: TextStyle(
-                      color: selected ? const Color(0xFF2980B9) : Colors.black,
+                      color: selected ? Colors.black : Colors.black,
                     ),
                   );
                 }).toList(),
@@ -556,7 +552,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 height: 48,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2980B9),
+                    backgroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
