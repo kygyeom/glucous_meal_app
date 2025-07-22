@@ -29,48 +29,71 @@ class LifestyleScreen extends StatefulWidget {
 class _LifestyleScreenState extends State<LifestyleScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  List<String> selectedMeals = [];
+  List<String> selectedMeals = ['Breakfast'];
   String selectedMealMethod = 'Direct cooking';
 
-  List<String> dietaryRestrictions = [
-    'Vegetarian',
-    'Halal',
-    'Gluten-free',
-    'None',
-  ];
-  List<String> selectedRestrictions = [];
+  List<String> dietaryRestrictions = ['Vegetarian', 'Halal', 'Gluten-free', 'None'];
+  List<String> selectedRestrictions = ['None']; // 항상 기본으로 'None' 선택
+
+  void toggleDietary(String item) {
+    setState(() {
+      if (item == 'None') {
+        // 'None' 선택 시 다른 모든 항목 해제하고 'None'만 유지
+        selectedRestrictions = ['None'];
+      } else {
+        // 'None'을 제외한 항목 선택 시 'None' 제거
+        if (selectedRestrictions.contains('None')) {
+          selectedRestrictions.remove('None');
+        }
+  
+        if (selectedRestrictions.contains(item)) {
+          selectedRestrictions.remove(item);
+          // 아무것도 선택되지 않으면 'None' 다시 선택
+          if (selectedRestrictions.isEmpty) {
+            selectedRestrictions.add('None');
+          }
+        } else {
+          selectedRestrictions.add(item);
+        }
+      }
+    });
+  }
 
   List<String> allergyOptions = ['None', 'Dairy', 'Nuts', 'Shellfish', 'Other'];
-  List<String> selectedAllergies = [];
+  List<String> selectedAllergies = ['None'];
+
+  void toggleAllergy(String item) {
+    setState(() {
+      if (item == 'None') {
+        // '없음'을 선택한 경우 → 나머지 해제 후 '없음'만 선택
+        selectedAllergies = ['None'];
+      } else {
+        // '없음'이 선택되어 있으면 제거
+        selectedAllergies.remove('None');
+  
+        if (selectedAllergies.contains(item)) {
+          selectedAllergies.remove(item);
+          // 아무것도 선택 안된 경우 → '없음' 다시 선택
+          if (selectedAllergies.isEmpty) {
+            selectedAllergies.add('None');
+          }
+        } else {
+          selectedAllergies.add(item);
+        }
+      }
+    });
+  }
 
   bool agreedToTerms = false;
 
   void toggleMeal(String meal) {
     setState(() {
       if (selectedMeals.contains(meal)) {
+        // 마지막 하나면 삭제 못함
+        if (selectedMeals.length == 1) return;
         selectedMeals.remove(meal);
       } else {
         selectedMeals.add(meal);
-      }
-    });
-  }
-
-  void toggleRestriction(String item) {
-    setState(() {
-      if (selectedRestrictions.contains(item)) {
-        selectedRestrictions.remove(item);
-      } else {
-        selectedRestrictions.add(item);
-      }
-    });
-  }
-
-  void toggleAllergy(String item) {
-    setState(() {
-      if (selectedAllergies.contains(item)) {
-        selectedAllergies.remove(item);
-      } else {
-        selectedAllergies.add(item);
       }
     });
   }
@@ -81,7 +104,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
 
     final profile = UserProfile(
       age: widget.age,
-      gender: widget.gender == '남성' ? 'M' : 'F',
+      gender: widget.gender,
       weight: widget.weight,
       height: widget.height,
       bmi: bmi,
@@ -138,7 +161,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
             if (emoji != null) ...[
               CircleAvatar(
                 radius: 12,
-                backgroundColor: const Color(0xFFF5F5F5),
+                backgroundColor: Colors.white,
                 child: Text(emoji, style: const TextStyle(fontSize: 14)),
               ),
               const SizedBox(width: 8),
@@ -168,7 +191,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
           ),
           const SizedBox(width: 12),
           Expanded(
-            flex: 8, // 전체의 약 80% 차지
+            flex: 8,
             child: Container(
               height: 8,
               decoration: BoxDecoration(
@@ -177,7 +200,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
               ),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
-                widthFactor: 0.6, // 진행도 (예: 0.25)
+                widthFactor: 0.6,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,
@@ -187,7 +210,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
               ),
             ),
           ),
-          const Spacer(flex: 1), // 나머지 10% 여백
+          const Spacer(flex: 1),
         ],
       ),
     );
@@ -196,7 +219,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F4F4),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -224,30 +247,30 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
                 crossAxisCount: 2,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 8,  // 간격 줄임
-                crossAxisSpacing: 8, // 간격 줄임
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
                 childAspectRatio: 3,
                 children: [
                   buildChip(
-                    label: 'Breakfast',
+                    label: '아침',
                     emoji: '🍳',
                     selected: selectedMeals.contains('Breakfast'),
                     onTap: () => toggleMeal('Breakfast'),
                   ),
                   buildChip(
-                    label: 'Lunch',
+                    label: '점심',
                     emoji: '🥗',
                     selected: selectedMeals.contains('Lunch'),
                     onTap: () => toggleMeal('Lunch'),
                   ),
                   buildChip(
-                    label: 'Dinner',
+                    label: '저녁',
                     emoji: '🍽️',
                     selected: selectedMeals.contains('Dinner'),
                     onTap: () => toggleMeal('Dinner'),
                   ),
                   buildChip(
-                    label: 'Snacks',
+                    label: '간식',
                     emoji: '🍪',
                     selected: selectedMeals.contains('Snacks'),
                     onTap: () => toggleMeal('Snacks'),
@@ -258,20 +281,30 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
               const Text('주된 식사 방식'),
               const SizedBox(height: 4),
               Wrap(
-                children: ['Direct cooking', 'Eating out', 'Delivery based']
+                children: ['직접 요리', '외식', '배달 위주']
                     .map(
                       (method) => buildChip(
                         label: method,
-                        selected: selectedMealMethod == method,
-                        onTap: () =>
-                            setState(() => selectedMealMethod = method),
+                        selected: selectedMealMethod ==
+                            (method == '직접 요리'
+                                ? 'Direct cooking'
+                                : method == '외식'
+                                    ? 'Eating out'
+                                    : 'Delivery based'),
+                        onTap: () => setState(() {
+                          selectedMealMethod = method == '직접 요리'
+                              ? 'Direct cooking'
+                              : method == '외식'
+                                  ? 'Eating out'
+                                  : 'Delivery based';
+                        }),
                       ),
                     )
                     .toList(),
               ),
               const SizedBox(height: 4),
               const Text(
-                'How do you most often prepare or acquire your meals?',
+                '주로 어떤 방식으로 식사를 준비하거나 구매하시나요?',
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
               const SizedBox(height: 24),
@@ -293,7 +326,13 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
                 physics: NeverScrollableScrollPhysics(),
                 children: dietaryRestrictions.map(
                   (item) => buildChip(
-                    label: item,
+                    label: item == 'Vegetarian'
+                        ? '채식'
+                        : item == 'Halal'
+                            ? '할랄'
+                            : item == 'Gluten-free'
+                                ? '글루텐 프리'
+                                : '제한 없음',
                     emoji: item == 'Vegetarian'
                         ? '🥕'
                         : item == 'Halal'
@@ -302,26 +341,32 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
                                 ? '🌾'
                                 : '❌',
                     selected: selectedRestrictions.contains(item),
-                    onTap: () => toggleRestriction(item),
+                    onTap: () => toggleDietary(item),
                   ),
                 ).toList(),
               ),
               const SizedBox(height: 24),
               const Text('음식 알레르기'),
               Wrap(
-                children: allergyOptions
-                    .map(
-                      (item) => buildChip(
-                        label: item,
-                        selected: selectedAllergies.contains(item),
-                        onTap: () => toggleAllergy(item),
-                      ),
-                    )
-                    .toList(),
+                children: allergyOptions.map(
+                  (item) => buildChip(
+                    label: item == 'None'
+                        ? '없음'
+                        : item == 'Dairy'
+                            ? '유제품'
+                            : item == 'Nuts'
+                                ? '견과류'
+                                : item == 'Shellfish'
+                                    ? '갑각류'
+                                    : '기타',
+                    selected: selectedAllergies.contains(item),
+                    onTap: () => toggleAllergy(item),
+                  ),
+                ).toList(),
               ),
               const SizedBox(height: 4),
               const Text(
-                'Please select any food allergies.',
+                '알레르기가 있는 음식을 선택해주세요.',
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
               const SizedBox(height: 16),
@@ -329,7 +374,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
                 value: agreedToTerms,
                 onChanged: (val) =>
                     setState(() => agreedToTerms = val ?? false),
-                title: const Text('개인정보 이용 동의'),
+                title: const Text('개인정보 이용에 동의합니다.'),
                 controlAffinity: ListTileControlAffinity.leading,
               ),
               const SizedBox(height: 16),
@@ -345,7 +390,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
                     ),
                   ),
                   child: const Text(
-                    'Continue',
+                    '계속하기',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,

@@ -17,7 +17,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
   String gender = 'M';
   String activityLevel = 'Mainly sitting';
-  String diabetes = 'Type 1';
+  String diabetes = '없음';
   String goal = 'Blood sugar control';
 
   final List<String> genderOptions = ['M', 'F'];
@@ -27,10 +27,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
     '3+ times/week',
   ];
   final List<String> diabetesOptions = [
-    'Type 1',
-    'Type 2',
-    'Pre-diabetic',
-    'General user',
+    '제1형 당뇨',
+    '제2형 당뇨',
+    '없음',
   ];
   final List<String> goalOptions = [
     'Blood sugar control',
@@ -145,12 +144,16 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               TextFormField(
                 keyboardType: TextInputType.number,
                 onChanged: (val) => height = double.tryParse(val),
+                validator: (val) =>
+                    val == null || val.isEmpty ? '키를 입력해주세요' : null,
               ),
               const SizedBox(height: 24),
               const Text("몸무게를 입력해주세요 (kg)"),
               TextFormField(
                 keyboardType: TextInputType.number,
                 onChanged: (val) => weight = double.tryParse(val),
+                validator: (val) =>
+                    val == null || val.isEmpty ? '몸무게를 입력해주세요' : null,
               ),
               const SizedBox(height: 24),
               const Text("활동량을 선택해주세요"),
@@ -182,17 +185,15 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 spacing: 8,
                 children: diabetesOptions.map((option) {
                   final selected = diabetes == option;
-                  final label = option == 'Type 1'
-                      ? '제1형 당뇨'
-                      : option == 'Type 2'
-                          ? '제2형 당뇨'
-                          : option == 'Pre-diabetic'
-                              ? '당뇨 전단계'
-                              : '일반 사용자';
                   return ChoiceChip(
-                    label: Text(label),
+                    label: Text(option),
                     selected: selected,
-                    onSelected: (_) => setState(() => diabetes = option),
+                    onSelected: (_) {
+                      // 이미 선택된 항목을 다시 눌러도 해제되지 않도록 조건 추가
+                      if (!selected) {
+                        setState(() => diabetes = option);
+                      }
+                    },
                     selectedColor: const Color(0xFFF4F4F4),
                     labelStyle: TextStyle(
                       color: selected ? Colors.black : Colors.black,
