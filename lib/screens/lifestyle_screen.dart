@@ -108,16 +108,12 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
       weight: widget.weight,
       height: widget.height,
       bmi: bmi,
-      activityLevel: widget.activityLevel == '낮음'
-          ? 'low'
-          : widget.activityLevel == '높음'
-              ? 'high'
-              : 'medium',
-      goal: widget.goal == '체중 감량'
-          ? 'weight_loss'
-          : widget.goal == '균형 잡힌 식단'
-              ? 'balanced'
-              : 'blood_sugar_control',
+      activityLevel: widget.activityLevel,
+      goal: widget.goal == 'weight_loss'
+          ? '체중 관리'
+          : widget.goal == 'balanced'
+              ? '균형 잡힌 식단'
+              : '혈당 관리',
       diabetes: widget.diabetes == '없음'
           ? 'none'
           : widget.diabetes == '제1형 당뇨'

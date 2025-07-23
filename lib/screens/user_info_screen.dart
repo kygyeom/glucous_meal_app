@@ -16,15 +16,15 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   double? weight;
 
   String gender = 'M';
-  String activityLevel = 'Mainly sitting';
+  String activityLevel = 'high';
   String diabetes = '없음';
-  String goal = 'Blood sugar control';
+  String goal = 'blood_sugar_control';
 
   final List<String> genderOptions = ['M', 'F'];
   final List<String> activityOptions = [
-    'Mainly sitting',
-    '1+ times/week',
-    '3+ times/week',
+    'low',
+    'medium',
+    'high',
   ];
   final List<String> diabetesOptions = [
     '제1형 당뇨',
@@ -32,9 +32,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
     '없음',
   ];
   final List<String> goalOptions = [
-    'Blood sugar control',
-    'Weight management',
-    'Balanced diet',
+    'blood_sugar_control',
+    'weight_loss',
+    'balanced',
   ];
 
   Widget buildProgressBar(BuildContext context) {
@@ -162,9 +162,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 spacing: 8,
                 children: activityOptions.map((option) {
                   final selected = activityLevel == option;
-                  final label = option == 'Mainly sitting'
+                  final label = option == 'low'
                       ? '주로 앉아서 생활'
-                      : option == '1+ times/week'
+                      : option == 'medium'
                           ? '주 1회 이상 운동'
                           : '주 3회 이상 운동';
                   return ChoiceChip(
@@ -208,9 +208,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 spacing: 8,
                 children: goalOptions.map((option) {
                   final selected = goal == option;
-                  final label = option == 'Blood sugar control'
+                  final label = option == 'blood_sugar_control'
                       ? '혈당 관리'
-                      : option == 'Weight management'
+                      : option == 'weight_loss'
                           ? '체중 관리'
                           : '균형 잡힌 식단';
                   return ChoiceChip(

@@ -38,9 +38,9 @@ const Map<String, String> allergyTranslations = {
 };
 
 const Map<String, String> activityTranslations = {
-  'low': '낮은',
-  'high': '높음',
-  'medium': '중간',
+  'low': '주로 앉아서 생활',
+  'medium': '주 1회 이상 운동',
+  'high': '주 3회 이상 운동',
 };
 
 const Map<String, String> goalTranslations = {
