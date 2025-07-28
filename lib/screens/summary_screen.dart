@@ -34,6 +34,8 @@ const Map<String, String> allergyTranslations = {
   'Dairy': '유제품',
   'Nuts': '견과류',
   'Shellfish': '갑각류',
+  'Meat': '고기',
+  'Seafood': '해산물',
   'Other': '기타',
 };
 
@@ -79,9 +81,15 @@ class SummaryScreen extends StatelessWidget {
 
   double get bmr {
     if (userProfile.gender == 'M') {
-      return 66.5 + (13.75 * weight) + (5.003 * height) - (6.75 * userProfile.age);
+      return 66.5 +
+          (13.75 * weight) +
+          (5.003 * height) -
+          (6.75 * userProfile.age);
     } else {
-      return 655.1 + (9.563 * weight) + (1.850 * height) - (4.676 * userProfile.age);
+      return 655.1 +
+          (9.563 * weight) +
+          (1.850 * height) -
+          (4.676 * userProfile.age);
     }
   }
 
@@ -167,22 +175,51 @@ class SummaryScreen extends StatelessWidget {
             const SizedBox(height: 24),
             _buildInfoRow('나이', '${userProfile.age}세'),
             _buildInfoRow('성별', userProfile.gender == 'M' ? '남성' : '여성'),
-            _buildInfoRow('활동 수준', _translate(userProfile.activityLevel, 'activity')),
+            _buildInfoRow(
+              '활동 수준',
+              _translate(userProfile.activityLevel, 'activity'),
+            ),
             _buildInfoRow('건강 목표', _translate(userProfile.goal, 'goal')),
-            _buildInfoRow('당뇨병 유무', _translate(userProfile.diabetes, 'diabetes')),
+            _buildInfoRow(
+              '당뇨병 유무',
+              _translate(userProfile.diabetes, 'diabetes'),
+            ),
             _buildInfoRow('BMI', '${bmi.toStringAsFixed(1)} ($bmiComment)'),
             _buildInfoRow('기초 대사량 (BMR)', '${bmr.toStringAsFixed(0)} kcal'),
-            _buildInfoRow('하루 권장 섭취 칼로리', '${maintenanceCalories.toStringAsFixed(0)} kcal'),
+            _buildInfoRow(
+              '하루 권장 섭취 칼로리',
+              '${maintenanceCalories.toStringAsFixed(0)} kcal',
+            ),
             const SizedBox(height: 24),
             const Text(
               '기타 입력 정보',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              ),
             ),
             const SizedBox(height: 12),
-            _buildInfoRow('주 식사 시간', userProfile.meals.map((m) => _translate(m, 'meal')).join(', ')),
-            _buildInfoRow('식사 방식', _translate(userProfile.mealMethod, 'meal method')),
-            _buildInfoRow('식사 제약', userProfile.dietaryRestrictions.map((r) => _translate(r, 'dietary')).join(', ')),
-            _buildInfoRow('알레르기', userProfile.allergies.map((a) => _translate(a, 'allergy')).join(', ')),
+            _buildInfoRow(
+              '주 식사 시간',
+              userProfile.meals.map((m) => _translate(m, 'meal')).join(', '),
+            ),
+            _buildInfoRow(
+              '식사 방식',
+              _translate(userProfile.mealMethod, 'meal method'),
+            ),
+            _buildInfoRow(
+              '식사 제약',
+              userProfile.dietaryRestrictions
+                  .map((r) => _translate(r, 'dietary'))
+                  .join(', '),
+            ),
+            _buildInfoRow(
+              '알레르기',
+              userProfile.allergies
+                  .map((a) => _translate(a, 'allergy'))
+                  .join(', '),
+            ),
             const SizedBox(height: 32),
             const Divider(),
             const SizedBox(height: 16),
@@ -200,7 +237,8 @@ class SummaryScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MealRecommendationScreen(userProfile: userProfile),
+                      builder: (context) =>
+                          MealRecommendationScreen(userProfile: userProfile),
                     ),
                   );
                 },
@@ -212,7 +250,10 @@ class SummaryScreen extends StatelessWidget {
                 ),
                 child: const Text(
                   '추천 식단 보기',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
@@ -239,10 +280,7 @@ class SummaryScreen extends StatelessWidget {
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-              ),
+              style: const TextStyle(fontSize: 16, color: Colors.black),
             ),
           ),
         ],

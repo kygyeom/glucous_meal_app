@@ -29,10 +29,15 @@ class LifestyleScreen extends StatefulWidget {
 class _LifestyleScreenState extends State<LifestyleScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  List<String> selectedMeals = ['Breakfast'];
+  List<String> selectedMeals = ['Lunch', 'Dinner'];
   String selectedMealMethod = 'Direct cooking';
 
-  List<String> dietaryRestrictions = ['Vegetarian', 'Halal', 'Gluten-free', 'None'];
+  List<String> dietaryRestrictions = [
+    'Vegetarian',
+    'Halal',
+    'Gluten-free',
+    'None',
+  ];
   List<String> selectedRestrictions = ['None']; // 항상 기본으로 'None' 선택
 
   void toggleDietary(String item) {
@@ -45,7 +50,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
         if (selectedRestrictions.contains('None')) {
           selectedRestrictions.remove('None');
         }
-  
+
         if (selectedRestrictions.contains(item)) {
           selectedRestrictions.remove(item);
           // 아무것도 선택되지 않으면 'None' 다시 선택
@@ -59,7 +64,15 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
     });
   }
 
-  List<String> allergyOptions = ['None', 'Dairy', 'Nuts', 'Shellfish', 'Other'];
+  List<String> allergyOptions = [
+    'None',
+    'Dairy',
+    'Nuts',
+    'Shellfish',
+    'Meat',
+    'Seafood',
+    'Other',
+  ];
   List<String> selectedAllergies = ['None'];
 
   void toggleAllergy(String item) {
@@ -70,7 +83,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
       } else {
         // '없음'이 선택되어 있으면 제거
         selectedAllergies.remove('None');
-  
+
         if (selectedAllergies.contains(item)) {
           selectedAllergies.remove(item);
           // 아무것도 선택 안된 경우 → '없음' 다시 선택
@@ -112,13 +125,13 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
       goal: widget.goal == 'weight_loss'
           ? '체중 관리'
           : widget.goal == 'balanced'
-              ? '균형 잡힌 식단'
-              : '혈당 관리',
+          ? '균형 잡힌 식단'
+          : '혈당 관리',
       diabetes: widget.diabetes == '없음'
           ? 'none'
           : widget.diabetes == '제1형 당뇨'
-              ? 'type1'
-              : 'type2',
+          ? 'type1'
+          : 'type2',
       meals: selectedMeals,
       mealMethod: selectedMealMethod,
       dietaryRestrictions: selectedRestrictions,
@@ -281,18 +294,19 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
                     .map(
                       (method) => buildChip(
                         label: method,
-                        selected: selectedMealMethod ==
+                        selected:
+                            selectedMealMethod ==
                             (method == '직접 요리'
                                 ? 'Direct cooking'
                                 : method == '외식'
-                                    ? 'Eating out'
-                                    : 'Delivery based'),
+                                ? 'Eating out'
+                                : 'Delivery based'),
                         onTap: () => setState(() {
                           selectedMealMethod = method == '직접 요리'
                               ? 'Direct cooking'
                               : method == '외식'
-                                  ? 'Eating out'
-                                  : 'Delivery based';
+                              ? 'Eating out'
+                              : 'Delivery based';
                         }),
                       ),
                     )
@@ -320,49 +334,57 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
                 mainAxisSpacing: 8,
                 childAspectRatio: 3,
                 physics: NeverScrollableScrollPhysics(),
-                children: dietaryRestrictions.map(
-                  (item) => buildChip(
-                    label: item == 'Vegetarian'
-                        ? '채식'
-                        : item == 'Halal'
+                children: dietaryRestrictions
+                    .map(
+                      (item) => buildChip(
+                        label: item == 'Vegetarian'
+                            ? '채식'
+                            : item == 'Halal'
                             ? '할랄'
                             : item == 'Gluten-free'
-                                ? '글루텐 프리'
-                                : '제한 없음',
-                    emoji: item == 'Vegetarian'
-                        ? '🥕'
-                        : item == 'Halal'
+                            ? '글루텐 프리'
+                            : '제한 없음',
+                        emoji: item == 'Vegetarian'
+                            ? '🥕'
+                            : item == 'Halal'
                             ? '🐓'
                             : item == 'Gluten-free'
-                                ? '🌾'
-                                : '❌',
-                    selected: selectedRestrictions.contains(item),
-                    onTap: () => toggleDietary(item),
-                  ),
-                ).toList(),
+                            ? '🌾'
+                            : '❌',
+                        selected: selectedRestrictions.contains(item),
+                        onTap: () => toggleDietary(item),
+                      ),
+                    )
+                    .toList(),
               ),
               const SizedBox(height: 24),
               const Text('음식 알레르기'),
               Wrap(
-                children: allergyOptions.map(
-                  (item) => buildChip(
-                    label: item == 'None'
-                        ? '없음'
-                        : item == 'Dairy'
+                children: allergyOptions
+                    .map(
+                      (item) => buildChip(
+                        label: item == 'None'
+                            ? '없음'
+                            : item == 'Dairy'
                             ? '유제품'
                             : item == 'Nuts'
-                                ? '견과류'
-                                : item == 'Shellfish'
-                                    ? '갑각류'
-                                    : '기타',
-                    selected: selectedAllergies.contains(item),
-                    onTap: () => toggleAllergy(item),
-                  ),
-                ).toList(),
+                            ? '견과류'
+                            : item == 'Shellfish'
+                            ? '갑각류'
+                            : item == 'Meat'
+                            ? '육류'
+                            : item == 'Seafood'
+                            ? '해산물'
+                            : '기타',
+                        selected: selectedAllergies.contains(item),
+                        onTap: () => toggleAllergy(item),
+                      ),
+                    )
+                    .toList(),
               ),
               const SizedBox(height: 4),
               const Text(
-                '알레르기가 있는 음식을 선택해주세요.',
+                '알레르기가 있는 음식을 선택해주세요.\n할랄, 채식주의자, 또는 비선호 음식이 있는 경우에도 체크해주세요.',
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
               const SizedBox(height: 16),

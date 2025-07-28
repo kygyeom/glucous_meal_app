@@ -1,9 +1,13 @@
+from typing import List
+
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
-from typing import List
 from pydantic import BaseModel
 import joblib
 import pandas as pd
+from mysql import connector
+from dotenv import load_dotenv
+from os import getenv
 
 from model import load_model_normalizer, predict_dict
 from preprocess import Normalizer
@@ -32,6 +36,37 @@ class Recommendation(BaseModel):
     nutrition: dict
 
 
+load_dotenv()
+db_config = {
+    'host': getenv('DB_HOST'),
+    'user': getenv('DB_USER'),
+    'password': getenv('DB_PASSWORD'),
+    'database': getenv('DB_NAME'),
+    'charset': 'utf8mb4'
+}
+
+# Create restriction list
+def restrict_foods(user: UserProfile):
+
+    allergy_eng_kor = {
+        'Dairy': '유제품',
+        'Nuts': '견과류',
+        'Shellfish': '갑각류',
+        'Meat': '육류',
+        'Seafood': '해산물',
+        'Other': '기타',
+    }
+
+    restriction = set([allergy_eng_kor[allergy_name] for allergy_name in user.allergies])
+    if user.dietary_restrictions == 'Vegetarian':
+        restriction.update(['육류', '해산물'])
+
+    # TODO: 기타의 처리방법은 나중에 고민, 우선 제거
+    restriction.discard('기타')
+
+    return restriction
+
+
 
 @app.post("/recommend", response_model=List[Recommendation])
 def recommend_meals(user: UserProfile):
@@ -51,6 +86,9 @@ def recommend_meals(user: UserProfile):
         print(f"Dietary Restrictions: {user.dietary_restrictions}")
         print(f"Allergies: {user.allergies}")
 
+        # Filter foods customer cannot eat
+        restriction = restrict_foods(user)
+
         # Load model
         model, normalizer = load_model_normalizer(MODEL_PATH)
         user_dict = {
@@ -65,28 +103,60 @@ def recommend_meals(user: UserProfile):
 
         recommend = predict_dict(user_dict, model, normalizer)
         recommend = recommend[0]
-        print(recommend)
+        num_recommend = 5
+
+        query = f"""
+        SELECT f.name, f.brand, f.calories_kcal, f.protein_g, f.carbohydrate_g,
+               f.fat_g, f.sugar_g, f.saturated_fat_g, f.sodium_mg, f.fiber_g,
+               f.allergy, f.price, f.shipping_fee, f.link
+        FROM food_products f
+        JOIN product_category fc ON f.product_id = fc.product_id
+        JOIN category c ON fc.category_id = c.category_id
+        WHERE c.name IN ('{recommend[0]}', '{recommend[1]}', '{recommend[2]}')
+          AND f.product_id NOT IN (
+              SELECT pa.product_id
+              FROM product_allergy pa
+              JOIN allergy a ON pa.allergy_id = a.allergy_id
+              WHERE a.name IN ({", ".join(f"\"{r}\"" for r in restriction)})
+          )
+        GROUP BY f.product_id
+        HAVING SUM(c.name = '{recommend[0]}') > 0
+           AND SUM(c.name = '{recommend[1]}') > 0
+           AND SUM(c.name = '{recommend[2]}') > 0
+        ORDER BY RAND()
+        """
+        # LIMIT {num_recommend};
+        # """
+
+        columns = ['name', 'brand', 'calories_kcal', 'protein_g', 'carbohydrate_g', 'fat_g', 'sugar_g', 'saturated_fat_g', 'sodium_mg', 'fiber_g', 'allergy', 'price', 'shipping_fee', 'link']
+        conn = connector.connect(**db_config)
+        cursor = conn.cursor()
+        cursor.execute(query)
+        results = cursor.fetchall()
+        cursor.close()
+        df = pd.DataFrame(
+            results,
+            columns=columns
+        )
 
         # Recommend Foods
         recommend_data = [
             {
-                "food_name": "Grilled Chicken Salad",
+                "food_name": row.name,
                 "food_group": recommend[0],
                 "expected_glucose_impact": 12.5,
-                "nutrition": {"carbs": 10, "protein": 35, "fat": 15}
-            },
-            {
-                "food_name": "Tofu Stir Fry",
-                "food_group": recommend[1],
-                "expected_glucose_impact": 9.8,
-                "nutrition": {"carbs": 15, "protein": 20, "fat": 10}
-            },
-            {
-                "food_name": "Grilled Chicken Salad",
-                "food_group": recommend[2],
-                "expected_glucose_impact": 12.5,
-                "nutrition": {"carbs": 10, "protein": 35, "fat": 15}
-            },
+                "price": row.price,
+                "shipping_fee": row.shipping_fee,
+                "nutrition": {
+                    "carbs": row.carbohydrate_g,
+                    "protein": row.protein_g,
+                    "fat": row.fat_g,
+                    "sugar": row.sugar_g,
+                    "saturated_fat": row.saturated_fat_g,
+                    "sodium": row.sodium_mg,
+                    "fiber": row.fiber_g,
+                }
+            } for row in df.itertuples(index=False)
         ]
 
         return JSONResponse(
@@ -97,24 +167,3 @@ def recommend_meals(user: UserProfile):
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
-# # main.py
-# from fastapi import FastAPI, HTTPException
-# from pydantic import BaseModel
-# from typing import List
-# from train_LMF import get_recommendations  # 친구 추천 함수 사용
-
-# app = FastAPI()
-
-
-# @app.get("/")
-# def root():
-#     return {"message": "Welcome to GlucoUS Recommendation API"}
-
-# @app.post("/recommend", response_model=List[Recommendation])
-# def recommend_meals(user: UserProfile):
-#     try:
-#         user_dict = user.dict()
-#         results = get_recommendations(user_dict)
-#         return results
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=str(e))

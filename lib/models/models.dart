@@ -44,7 +44,7 @@ class UserProfile {
     };
   }
 
-factory UserProfile.fromJson(Map<String, dynamic> json) {
+  factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
       age: json['age'],
       gender: json['gender'],
@@ -62,17 +62,20 @@ factory UserProfile.fromJson(Map<String, dynamic> json) {
   }
 }
 
-
 class Recommendation {
   final String foodName;
   final String foodGroup;
   final double expectedGlucoseImpact;
+  final double price;
+  final double shippingFee;
   final Map<String, dynamic> nutrition;
 
   Recommendation({
     required this.foodName,
     required this.foodGroup,
     required this.expectedGlucoseImpact,
+    required this.price,
+    required this.shippingFee,
     required this.nutrition,
   });
 
@@ -80,7 +83,10 @@ class Recommendation {
     return Recommendation(
       foodName: json['food_name'],
       foodGroup: json['food_group'],
-      expectedGlucoseImpact: (json['expected_glucose_impact'] as num).toDouble(),
+      expectedGlucoseImpact: (json['expected_glucose_impact'] as num)
+          .toDouble(),
+      price: (json['price'] as num).toDouble(),
+      shippingFee: (json['shipping_fee'] as num).toDouble(),
       nutrition: Map<String, dynamic>.from(json['nutrition']),
     );
   }

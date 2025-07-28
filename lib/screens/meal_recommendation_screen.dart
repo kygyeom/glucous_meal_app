@@ -10,7 +10,8 @@ class MealRecommendationScreen extends StatefulWidget {
   const MealRecommendationScreen({super.key, required this.userProfile});
 
   @override
-  State<MealRecommendationScreen> createState() => _MealRecommendationScreenState();
+  State<MealRecommendationScreen> createState() =>
+      _MealRecommendationScreenState();
 }
 
 class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
@@ -21,6 +22,7 @@ class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
     super.initState();
     futureRecommendations = fetchRecommendations(widget.userProfile);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,21 +49,28 @@ class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
                   return Center(
                     child: Text(
                       '에러 발생: ${snapshot.error}',
-                      style: const TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(
                     child: Text(
                       '추천 식단이 없습니다.',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   );
                 } else {
                   final recommendations = snapshot.data!;
                   return ListView.separated(
                     padding: const EdgeInsets.all(16),
-                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 12),
                     itemCount: recommendations.length,
                     itemBuilder: (context, index) {
                       final rec = recommendations[index];
@@ -78,7 +87,10 @@ class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
                           ],
                         ),
                         child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
                           title: Text(
                             rec.foodName,
                             style: const TextStyle(
@@ -89,13 +101,23 @@ class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 4.0),
                             child: Text(
-                              '탄수화물: ${rec.nutrition['carbs']}g\n예상 혈당 영향: ${rec.expectedGlucoseImpact}',
-                              style: const TextStyle(fontSize: 13, color: Colors.black87),
+                              "탄수화물: ${rec.nutrition['carbs']}g\n"
+                              "단백질: ${rec.nutrition['protein']}g\n지방: ${rec.nutrition['fat']}g\n"
+                              "식이섬유: ${rec.nutrition['fiber']}g\n"
+                              "나트륨: ${rec.nutrition['sodium_mg'] != null ? "${rec.nutrition['sodium_mg']}mg" : "정보없음"}\n"
+                              "예상 혈당 영향: ${rec.expectedGlucoseImpact}",
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.black87,
+                              ),
                             ),
                           ),
                           trailing: Text(
-                            rec.foodGroup,
-                            style: const TextStyle(fontSize: 13, color: Colors.grey),
+                            "${(rec.price + rec.shippingFee).toInt()}원 (배송비 포함)",
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey,
+                            ),
                           ),
                           onTap: () {
                             Navigator.push(
@@ -126,7 +148,9 @@ class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const OnboardingScreen(),
+                    ),
                     (route) => false, // 기존의 모든 라우트 제거
                   );
                 },
