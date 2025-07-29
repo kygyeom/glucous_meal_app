@@ -11,6 +11,7 @@ class UserProfile {
   final String mealMethod;
   final List<String> dietaryRestrictions;
   final List<String> allergies;
+  final double averageGlucose;
 
   UserProfile({
     required this.age,
@@ -25,6 +26,7 @@ class UserProfile {
     required this.mealMethod,
     required this.dietaryRestrictions,
     required this.allergies,
+    required this.averageGlucose,
   });
 
   Map<String, dynamic> toJson() {
@@ -41,6 +43,7 @@ class UserProfile {
       "meal_method": mealMethod,
       "dietary_restrictions": dietaryRestrictions,
       "allergies": allergies,
+      "average_glucous": averageGlucose,
     };
   }
 
@@ -58,6 +61,7 @@ class UserProfile {
       mealMethod: json['mealMethod'],
       dietaryRestrictions: json['dietaryRestrictions'],
       allergies: json['allergies'],
+      averageGlucose: (json['average_glucose'] as num).toDouble(),
     );
   }
 }

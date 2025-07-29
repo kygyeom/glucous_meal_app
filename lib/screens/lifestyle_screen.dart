@@ -31,6 +31,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
 
   List<String> selectedMeals = ['Lunch', 'Dinner'];
   String selectedMealMethod = 'Direct cooking';
+  TextEditingController averageGlucoseController = TextEditingController();
 
   List<String> dietaryRestrictions = [
     'Vegetarian',
@@ -112,6 +113,11 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
   }
 
   void submitData() {
+    // Validity test
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
     final double bmi =
         widget.weight / ((widget.height / 100) * (widget.height / 100));
 
@@ -136,6 +142,7 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
       mealMethod: selectedMealMethod,
       dietaryRestrictions: selectedRestrictions,
       allergies: selectedAllergies,
+      averageGlucose: double.tryParse(averageGlucoseController.text) ?? 0.0,
     );
 
     Navigator.push(
@@ -386,6 +393,24 @@ class _LifestyleScreenState extends State<LifestyleScreen> {
               const Text(
                 '알레르기가 있는 음식을 선택해주세요.\n할랄, 채식주의자, 또는 비선호 음식이 있는 경우에도 체크해주세요.',
                 style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+              const SizedBox(height: 24),
+              const Text('최근 측정한 평균 혈당 수치를 입력해주세요.'),
+              TextFormField(
+                controller: averageGlucoseController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: '예: 105',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                ),
+                validator: (val) =>
+                    val == null || val.isEmpty ? '평균 혈당을 입력해주세요' : null,
               ),
               const SizedBox(height: 16),
               CheckboxListTile(

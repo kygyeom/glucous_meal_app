@@ -184,6 +184,7 @@ class SummaryScreen extends StatelessWidget {
               '당뇨병 유무',
               _translate(userProfile.diabetes, 'diabetes'),
             ),
+            _buildInfoRow('최근 평균 혈당', '${userProfile.averageGlucose}'),
             _buildInfoRow('BMI', '${bmi.toStringAsFixed(1)} ($bmiComment)'),
             _buildInfoRow('기초 대사량 (BMR)', '${bmr.toStringAsFixed(0)} kcal'),
             _buildInfoRow(

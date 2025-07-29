@@ -9,6 +9,7 @@ from mysql import connector
 from dotenv import load_dotenv
 from os import getenv
 
+from query import build_food_query
 from model import load_model_normalizer, predict_dict
 from preprocess import Normalizer
 
@@ -48,6 +49,9 @@ db_config = {
 # Create restriction list
 def restrict_foods(user: UserProfile):
 
+    if 'None' in user.allergies:
+        return [];
+
     allergy_eng_kor = {
         'Dairy': '유제품',
         'Nuts': '견과류',
@@ -65,6 +69,46 @@ def restrict_foods(user: UserProfile):
     restriction.discard('기타')
 
     return restriction
+
+
+def ai_food_recommend(
+    model_path: str,
+    user: UserProfile,
+):
+
+    # Load model
+    model, normalizer = load_model_normalizer(MODEL_PATH)
+    user_dict = {
+        'patient_id': 0,  # temporal patient id
+        'Age': user.age,
+        'Gender_M': 1.0 if user.gender == 'M' else 0.0,
+        'Gender_F': 1.0 if user.gender == 'F' else 0.0,
+        'BMI': user.bmi,
+        'Body weight ': user.weight,
+        'Height ': user.height,
+    }
+
+    recommend = predict_dict(user_dict, model, normalizer)
+    recommend = recommend[0]
+
+    return recommend
+
+
+def glucose_ai_forecast(
+    model_path: str,
+    user: UserProfile,
+):
+
+    user_dict = {
+        'Age': user.age,
+        'Gender_M': 1.0 if user.gender == 'M' else 0.0,
+        'Gender_F': 1.0 if user.gender == 'F' else 0.0,
+        'BMI': user.bmi,
+        'Body weight ': user.weight,
+        'Height ': user.height,
+    }
+
+    pass
 
 
 
@@ -89,44 +133,12 @@ def recommend_meals(user: UserProfile):
         # Filter foods customer cannot eat
         restriction = restrict_foods(user)
 
-        # Load model
-        model, normalizer = load_model_normalizer(MODEL_PATH)
-        user_dict = {
-            'patient_id': 0,  # temporal patient id
-            'Age': user.age,
-            'Gender_M': 1.0 if user.gender == 'M' else 0.0,
-            'Gender_F': 1.0 if user.gender == 'F' else 0.0,
-            'BMI': user.bmi,
-            'Body weight ': user.weight,
-            'Height ': user.height,
-        }
+        recommend = ai_food_recommend(
+            model_path=MODEL_PATH,
+            user=user
+        )
 
-        recommend = predict_dict(user_dict, model, normalizer)
-        recommend = recommend[0]
-        num_recommend = 5
-
-        query = f"""
-        SELECT f.name, f.brand, f.calories_kcal, f.protein_g, f.carbohydrate_g,
-               f.fat_g, f.sugar_g, f.saturated_fat_g, f.sodium_mg, f.fiber_g,
-               f.allergy, f.price, f.shipping_fee, f.link
-        FROM food_products f
-        JOIN product_category fc ON f.product_id = fc.product_id
-        JOIN category c ON fc.category_id = c.category_id
-        WHERE c.name IN ('{recommend[0]}', '{recommend[1]}', '{recommend[2]}')
-          AND f.product_id NOT IN (
-              SELECT pa.product_id
-              FROM product_allergy pa
-              JOIN allergy a ON pa.allergy_id = a.allergy_id
-              WHERE a.name IN ({", ".join(f"\"{r}\"" for r in restriction)})
-          )
-        GROUP BY f.product_id
-        HAVING SUM(c.name = '{recommend[0]}') > 0
-           AND SUM(c.name = '{recommend[1]}') > 0
-           AND SUM(c.name = '{recommend[2]}') > 0
-        ORDER BY RAND()
-        """
-        # LIMIT {num_recommend};
-        # """
+        query = build_food_query(recommend, restriction)
 
         columns = ['name', 'brand', 'calories_kcal', 'protein_g', 'carbohydrate_g', 'fat_g', 'sugar_g', 'saturated_fat_g', 'sodium_mg', 'fiber_g', 'allergy', 'price', 'shipping_fee', 'link']
         conn = connector.connect(**db_config)
