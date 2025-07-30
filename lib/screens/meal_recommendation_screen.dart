@@ -46,6 +46,8 @@ class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
+                  debugPrint('❗에러 발생: ${snapshot.error}');
+                  debugPrint('📌 스택 트레이스: ${snapshot.stackTrace}');
                   return Center(
                     child: Text(
                       '에러 발생: ${snapshot.error}',
@@ -105,7 +107,8 @@ class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
                               "단백질: ${rec.nutrition['protein']}g\n지방: ${rec.nutrition['fat']}g\n"
                               "식이섬유: ${rec.nutrition['fiber']}g\n"
                               "나트륨: ${rec.nutrition['sodium_mg'] != null ? "${rec.nutrition['sodium_mg']}mg" : "정보없음"}\n"
-                              "예상 혈당 영향: ${rec.expectedGlucoseImpact}",
+                              "예상 혈당 변화량: ${rec.expectedDeltaG}mg/dl\n"
+                              "예상 식후 최고 혈당: ${rec.expectedGMax}mg/dl\n",
                               style: const TextStyle(
                                 fontSize: 13,
                                 color: Colors.black87,
@@ -126,7 +129,8 @@ class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
                                 builder: (context) => MealDetailScreen(
                                   foodName: rec.foodName,
                                   foodGroup: rec.foodGroup,
-                                  glucoseImpact: rec.expectedGlucoseImpact,
+                                  // TODO: Fix this
+                                  glucoseImpact: 10,
                                   nutrition: rec.nutrition,
                                 ),
                               ),

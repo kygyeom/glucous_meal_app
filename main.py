@@ -10,10 +10,22 @@ from dotenv import load_dotenv
 from os import getenv
 
 from query import build_food_query
-from model import load_model_normalizer, predict_dict
+from model import load_model_normalizer, predict_dict, load_model
 from preprocess import Normalizer
 
+
+DB_COLUMNS= ['name', 'brand', 'calories_kcal', 'protein_g', 'carbohydrate_g', 'fat_g', 'sugar_g', 'saturated_fat_g', 'sodium_mg', 'fiber_g', 'allergy', 'price', 'shipping_fee', 'link']
 MODEL_PATH = "./saved_models/BM25CosSim_model.pkl"
+MAX_GLUCOSE_MODEL_PATH = "./saved_models/XGB_g_max.pkl"
+DELTA_GLUCOSE_MODEL_PATH = "./saved_models/XGB_delta_g.pkl"
+GLUCOSE_MODEL_MEAL_FEATURES = [
+    'carbohydrate_g', 'calories_kcal', 'protein_g', 'fat_g'
+]
+GLUCOSE_MODEL_USER_FEATURES = [
+    'Age', 'BMI', 'Body weight ', 'Height ', 'Gender_F', 'Gender_M'
+]
+
+
 app = FastAPI()
 
 class UserProfile(BaseModel):
@@ -29,11 +41,13 @@ class UserProfile(BaseModel):
     meal_method: str  # "Direct cooking", "Eating out", "Delivery based"
     dietary_restrictions: List[str]  # e.g., ["Vegetarian", "Halal"]
     allergies: List[str]  # e.g., ["Dairy", "Nuts"]
+    averageGlucose: float
 
 class Recommendation(BaseModel):
     food_name: str
     food_group: str
-    expected_glucose_impact: float
+    expected_g_max: float
+    expected_delta_g: float
     nutrition: dict
 
 
@@ -94,22 +108,45 @@ def ai_food_recommend(
     return recommend
 
 
-def glucose_ai_forecast(
+def delta_glucose_ai_forecast(
     model_path: str,
     user: UserProfile,
+    recommend: pd.DataFrame,  # recommendation result
 ):
 
-    user_dict = {
+    # TODO: forecast
+    model = load_model(DELTA_GLUCOSE_MODEL_PATH)
+    x = recommend[GLUCOSE_MODEL_MEAL_FEATURES].copy()
+    user_x = {
         'Age': user.age,
-        'Gender_M': 1.0 if user.gender == 'M' else 0.0,
-        'Gender_F': 1.0 if user.gender == 'F' else 0.0,
         'BMI': user.bmi,
         'Body weight ': user.weight,
         'Height ': user.height,
+        'Gender_F': 1.0 if user.gender == 'M' else 0.0,
+        'Gender_M': 1.0 if user.gender == 'F' else 0.0,
     }
+    for feature_name in GLUCOSE_MODEL_USER_FEATURES:
+        x.loc[:, feature_name] = user_x[feature_name]
+    print(user)
+    x = x.to_numpy()
 
-    pass
+    print(model.predict(x))
 
+    recommend['expected_delta_g'] = 10.0
+
+    return recommend
+
+
+def max_glucose_ai_forecast(
+    model_path: str,
+    user: UserProfile,
+    recommend: pd.DataFrame,  # recommendation result
+):
+
+    # TODO: forecast
+    recommend['expected_g_max'] = 110.0
+
+    return recommend
 
 
 @app.post("/recommend", response_model=List[Recommendation])
@@ -140,7 +177,8 @@ def recommend_meals(user: UserProfile):
 
         query = build_food_query(recommend, restriction)
 
-        columns = ['name', 'brand', 'calories_kcal', 'protein_g', 'carbohydrate_g', 'fat_g', 'sugar_g', 'saturated_fat_g', 'sodium_mg', 'fiber_g', 'allergy', 'price', 'shipping_fee', 'link']
+        print(query)
+
         conn = connector.connect(**db_config)
         cursor = conn.cursor()
         cursor.execute(query)
@@ -148,7 +186,18 @@ def recommend_meals(user: UserProfile):
         cursor.close()
         df = pd.DataFrame(
             results,
-            columns=columns
+            columns=DB_COLUMNS
+        )
+
+        df = max_glucose_ai_forecast(
+            model_path=MAX_GLUCOSE_MODEL_PATH,
+            user=user,
+            recommend=df,
+        )
+        df = delta_glucose_ai_forecast(
+            model_path=DELTA_GLUCOSE_MODEL_PATH,
+            user=user,
+            recommend=df,
         )
 
         # Recommend Foods
@@ -156,9 +205,10 @@ def recommend_meals(user: UserProfile):
             {
                 "food_name": row.name,
                 "food_group": recommend[0],
-                "expected_glucose_impact": 12.5,
                 "price": row.price,
                 "shipping_fee": row.shipping_fee,
+                "expected_g_max": row.expected_g_max,
+                "expected_delta_g": row.expected_delta_g,
                 "nutrition": {
                     "carbs": row.carbohydrate_g,
                     "protein": row.protein_g,

@@ -20,7 +20,8 @@ def build_food_query(
                 SELECT pa.product_id
                 FROM product_allergy pa
                 JOIN allergy a ON pa.allergy_id = a.allergy_id
-                WHERE a.name IN ({", ".join(f"\"{r}\"" for r in restriction)})
+                WHERE a.name IN ({", ".join(f"'{r}'" for r in restriction)})
+                )
             """
 
         query += f"""

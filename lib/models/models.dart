@@ -43,7 +43,7 @@ class UserProfile {
       "meal_method": mealMethod,
       "dietary_restrictions": dietaryRestrictions,
       "allergies": allergies,
-      "average_glucous": averageGlucose,
+      "average_glucose": averageGlucose,
     };
   }
 
@@ -69,7 +69,8 @@ class UserProfile {
 class Recommendation {
   final String foodName;
   final String foodGroup;
-  final double expectedGlucoseImpact;
+  final double expectedGMax;
+  final double expectedDeltaG;
   final double price;
   final double shippingFee;
   final Map<String, dynamic> nutrition;
@@ -77,7 +78,8 @@ class Recommendation {
   Recommendation({
     required this.foodName,
     required this.foodGroup,
-    required this.expectedGlucoseImpact,
+    required this.expectedGMax,
+    required this.expectedDeltaG,
     required this.price,
     required this.shippingFee,
     required this.nutrition,
@@ -87,8 +89,8 @@ class Recommendation {
     return Recommendation(
       foodName: json['food_name'],
       foodGroup: json['food_group'],
-      expectedGlucoseImpact: (json['expected_glucose_impact'] as num)
-          .toDouble(),
+      expectedDeltaG: (json['expected_delta_g'] as num).toDouble(),
+      expectedGMax: (json['expected_g_max'] as num).toDouble(),
       price: (json['price'] as num).toDouble(),
       shippingFee: (json['shipping_fee'] as num).toDouble(),
       nutrition: Map<String, dynamic>.from(json['nutrition']),
