@@ -41,7 +41,7 @@ class UserProfile(BaseModel):
     meal_method: str  # "Direct cooking", "Eating out", "Delivery based"
     dietary_restrictions: List[str]  # e.g., ["Vegetarian", "Halal"]
     allergies: List[str]  # e.g., ["Dairy", "Nuts"]
-    averageGlucose: float
+    average_glucose: float
 
 class Recommendation(BaseModel):
     food_name: str
@@ -188,7 +188,6 @@ def recommend_meals(user: UserProfile):
             results,
             columns=DB_COLUMNS
         )
-
         df = max_glucose_ai_forecast(
             model_path=MAX_GLUCOSE_MODEL_PATH,
             user=user,

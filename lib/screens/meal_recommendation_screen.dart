@@ -46,8 +46,9 @@ class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  debugPrint('❗에러 발생: ${snapshot.error}');
-                  debugPrint('📌 스택 트레이스: ${snapshot.stackTrace}');
+                  // TODO: Fix this
+                  print(snapshot.data);
+
                   return Center(
                     child: Text(
                       '에러 발생: ${snapshot.error}',

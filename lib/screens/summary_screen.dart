@@ -235,6 +235,8 @@ class SummaryScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+                  // TODO: remove this
+                  debugPrint('🔍 userProfile 정보: ${userProfile.averageGlucose}', wrapWidth: 1024);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
