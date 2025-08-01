@@ -22,7 +22,7 @@ GLUCOSE_MODEL_MEAL_FEATURES = [
     'carbohydrate_g', 'calories_kcal', 'protein_g', 'fat_g'
 ]
 GLUCOSE_MODEL_USER_FEATURES = [
-    'Age', 'BMI', 'Body weight ', 'Height ', 'Gender_F', 'Gender_M'
+    'g0', 'Age', 'BMI', 'Body weight ', 'Height ', 'Gender_F', 'Gender_M'
 ]
 
 
@@ -114,10 +114,10 @@ def delta_glucose_ai_forecast(
     recommend: pd.DataFrame,  # recommendation result
 ):
 
-    # TODO: forecast
     model = load_model(DELTA_GLUCOSE_MODEL_PATH)
     x = recommend[GLUCOSE_MODEL_MEAL_FEATURES].copy()
     user_x = {
+        'g0': user.average_glucose,
         'Age': user.age,
         'BMI': user.bmi,
         'Body weight ': user.weight,
@@ -127,12 +127,11 @@ def delta_glucose_ai_forecast(
     }
     for feature_name in GLUCOSE_MODEL_USER_FEATURES:
         x.loc[:, feature_name] = user_x[feature_name]
-    print(user)
     x = x.to_numpy()
 
-    print(model.predict(x))
+    predict = model.predict(x)
 
-    recommend['expected_delta_g'] = 10.0
+    recommend['expected_delta_g'] = predict
 
     return recommend
 
@@ -143,8 +142,24 @@ def max_glucose_ai_forecast(
     recommend: pd.DataFrame,  # recommendation result
 ):
 
-    # TODO: forecast
-    recommend['expected_g_max'] = 110.0
+    model = load_model(MAX_GLUCOSE_MODEL_PATH)
+    x = recommend[GLUCOSE_MODEL_MEAL_FEATURES].copy()
+    user_x = {
+        'g0': user.average_glucose,
+        'Age': user.age,
+        'BMI': user.bmi,
+        'Body weight ': user.weight,
+        'Height ': user.height,
+        'Gender_F': 1.0 if user.gender == 'M' else 0.0,
+        'Gender_M': 1.0 if user.gender == 'F' else 0.0,
+    }
+    for feature_name in GLUCOSE_MODEL_USER_FEATURES:
+        x.loc[:, feature_name] = user_x[feature_name]
+    x = x.to_numpy()
+
+    predict = model.predict(x)
+
+    recommend['expected_g_max'] = predict
 
     return recommend
 

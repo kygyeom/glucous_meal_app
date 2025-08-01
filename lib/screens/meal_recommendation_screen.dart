@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:glucous_meal_app/models/models.dart';
 import 'package:glucous_meal_app/services/api_service.dart';
 import 'meal_detail_screen.dart';
@@ -46,9 +47,6 @@ class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  // TODO: Fix this
-                  print(snapshot.data);
-
                   return Center(
                     child: Text(
                       '에러 발생: ${snapshot.error}',
@@ -108,8 +106,9 @@ class _MealRecommendationScreenState extends State<MealRecommendationScreen> {
                               "단백질: ${rec.nutrition['protein']}g\n지방: ${rec.nutrition['fat']}g\n"
                               "식이섬유: ${rec.nutrition['fiber']}g\n"
                               "나트륨: ${rec.nutrition['sodium_mg'] != null ? "${rec.nutrition['sodium_mg']}mg" : "정보없음"}\n"
-                              "예상 혈당 변화량: ${rec.expectedDeltaG}mg/dl\n"
-                              "예상 식후 최고 혈당: ${rec.expectedGMax}mg/dl\n",
+
+                              "예상 혈당 변화량: ${(rec.expectedDeltaG * 10).ceil() / 10} mg/dL\n"
+                              "예상 식후 최고 혈당: ${(rec.expectedGMax * 10).ceil() / 10} mg/dL",
                               style: const TextStyle(
                                 fontSize: 13,
                                 color: Colors.black87,
