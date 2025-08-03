@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'lifestyle_screen.dart';
+import 'research_result_screen.dart';
 
 class UserLifestyleScreen extends StatefulWidget {
   final int age;
@@ -179,7 +179,7 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LifestyleScreen(
+                        builder: (context) => ResearchResultScreen(
                           age: widget.age,
                           gender: widget.gender,
                           height: widget.height,
