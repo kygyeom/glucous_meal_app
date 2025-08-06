@@ -35,7 +35,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
-                widthFactor: 0.8,
+                widthFactor: 0.1,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,
@@ -80,7 +80,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    const Text("나이를 입력해주세요"),
+                    const Text("나이"),
                     TextFormField(
                       keyboardType: TextInputType.number,
                       onChanged: (val) => age = int.tryParse(val),
@@ -93,7 +93,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     const SizedBox(height: 24),
-                    const Text("성별을 선택해주세요"),
+                    const Text("성별"),
                     const SizedBox(height: 8),
                     Row(
                       children: ['M', 'F'].map((option) {
@@ -130,7 +130,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       }).toList(),
                     ),
                     const SizedBox(height: 24),
-                    const Text("키를 입력해주세요 (cm)"),
+                    const Text("키 (cm)"),
                     TextFormField(
                       keyboardType: TextInputType.number,
                       onChanged: (val) => height = double.tryParse(val),
@@ -138,7 +138,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           val == null || val.isEmpty ? '키를 입력해주세요' : null,
                     ),
                     const SizedBox(height: 24),
-                    const Text("몸무게를 입력해주세요 (kg)"),
+                    const Text("몸무게 (kg)"),
                     TextFormField(
                       keyboardType: TextInputType.number,
                       onChanged: (val) => weight = double.tryParse(val),
