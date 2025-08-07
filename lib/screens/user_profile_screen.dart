@@ -14,6 +14,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   double? height;
   double? weight;
   String gender = 'M';
+  String name = 'empty';
 
   Widget buildProgressBar() {
     return Padding(
@@ -80,6 +81,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                    const Text("별명"),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      onChanged: (val) => name = val,
+                      validator: (val) =>
+                          val == null || val.isEmpty ? '별명을 입력해주세요' : null,
+                    ),
+                    const SizedBox(height: 24),
                     const Text("나이"),
                     TextFormField(
                       keyboardType: TextInputType.number,
@@ -173,6 +182,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => UserLifestyleScreen(
+                            name: name,
                             age: age!,
                             gender: gender,
                             height: height!,

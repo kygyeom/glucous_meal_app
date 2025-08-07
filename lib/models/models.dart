@@ -1,4 +1,5 @@
 class UserProfile {
+  final String name;
   final int age;
   final String gender;
   final double weight;
@@ -14,6 +15,7 @@ class UserProfile {
   final double averageGlucose;
 
   UserProfile({
+    required this.name,
     required this.age,
     required this.gender,
     required this.weight,
@@ -31,6 +33,7 @@ class UserProfile {
 
   Map<String, dynamic> toJson() {
     return {
+      "name": name,
       "age": age,
       "gender": gender,
       "weight": weight,
@@ -49,6 +52,7 @@ class UserProfile {
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
+      name: json['name'],
       age: json['age'],
       gender: json['gender'],
       weight: json['weight'],

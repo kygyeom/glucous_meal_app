@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'user_meal_condition_screen.dart';
 
 class UserMealInfoScreen extends StatefulWidget {
+  final String name;
   final int age;
   final String gender;
   final double height;
@@ -13,6 +14,7 @@ class UserMealInfoScreen extends StatefulWidget {
 
   const UserMealInfoScreen({
     super.key,
+    required this.name,
     required this.age,
     required this.gender,
     required this.height,
@@ -151,6 +153,7 @@ class _UserMealInfoScreenState extends State<UserMealInfoScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => UserMealConditionScreen(
+                          name: widget.name,
                           age: widget.age,
                           gender: widget.gender,
                           height: widget.height,

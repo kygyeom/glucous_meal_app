@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'research_result_screen.dart';
 
 class UserLifestyleScreen extends StatefulWidget {
+  final String name;
   final int age;
   final String gender;
   final double height;
@@ -9,6 +10,7 @@ class UserLifestyleScreen extends StatefulWidget {
 
   const UserLifestyleScreen({
     super.key,
+    required this.name,
     required this.age,
     required this.gender,
     required this.height,
@@ -52,7 +54,7 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
               ),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
-                widthFactor: 0.8,
+                widthFactor: 0.2,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,
@@ -180,6 +182,7 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ResearchResultScreen(
+                          name: widget.name,
                           age: widget.age,
                           gender: widget.gender,
                           height: widget.height,

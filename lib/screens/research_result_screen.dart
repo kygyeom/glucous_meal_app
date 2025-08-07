@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'user_meal_info_screen.dart';
 
 class ResearchResultScreen extends StatefulWidget {
+  final String name;
   final int age;
   final String gender;
   final double height;
@@ -12,6 +13,7 @@ class ResearchResultScreen extends StatefulWidget {
 
   const ResearchResultScreen({
     super.key,
+    required this.name,
     required this.age,
     required this.gender,
     required this.height,
@@ -168,6 +170,7 @@ class _ResearchResultScreenState extends State<ResearchResultScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => UserMealInfoScreen(
+                          name: widget.name,
                           age: widget.age,
                           gender: widget.gender,
                           height: widget.height,

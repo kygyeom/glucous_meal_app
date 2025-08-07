@@ -3,9 +3,11 @@ import 'dart:math';
 import 'package:glucous_meal_app/models/models.dart';
 import 'package:glucous_meal_app/services/api_service.dart';
 import 'meal_recommendation_screen.dart';
+import 'food_search_test_screen.dart';
 import 'glucous_loading_screen.dart';
 
 class UserMealConditionScreen extends StatefulWidget {
+  final String name;
   final int age;
   final String gender;
   final double height;
@@ -18,6 +20,7 @@ class UserMealConditionScreen extends StatefulWidget {
 
   const UserMealConditionScreen({
     super.key,
+    required this.name,
     required this.age,
     required this.gender,
     required this.height,
@@ -70,6 +73,7 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
     final double bmi = widget.weight / pow(widget.height / 100, 2);
 
     final userProfile = UserProfile(
+      name: widget.name,
       age: widget.age,
       gender: widget.gender,
       weight: widget.weight,
@@ -285,15 +289,28 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                     width: double.infinity,
                     height: 48,
                     child: ElevatedButton(
-                      onPressed: agreedToTerms ? submitData : null,
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FoodSearchTestScreen(
+                              name: widget.name,
+                              age: widget.age,
+                              gender: widget.gender,
+                              weight: widget.weight,
+                              height: widget.height,
+                              activityLevel: widget.activityLevel,
+                              goal: widget.goal,
+                              diabetes: widget.diabetes,
+                              meals: widget.meals,
+                              mealMethod: widget.mealMethod,
+                              dietaryRestrictions: selectedRestrictions,
+                              allergies: selectedAllergies,
+                              averageGlucose: double.tryParse(averageGlucoseController.text) ?? 100.0,
+                            ),
+                          ),
+                        );
+                      },
                       child: Ink(
                         decoration: BoxDecoration(
                           gradient: agreedToTerms
