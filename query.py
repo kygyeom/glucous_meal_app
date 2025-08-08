@@ -14,16 +14,15 @@ def build_food_query(
         WHERE c.name IN ('{recommend[0]}', '{recommend[1]}', '{recommend[2]}')
         """
 
-        # TODO: This is just for the test
-        #if restriction:
-        #    query += f"""
-        #        AND f.product_id NOT IN (
-        #        SELECT pa.product_id
-        #        FROM product_allergy pa
-        #        JOIN allergy a ON pa.allergy_id = a.allergy_id
-        #        WHERE a.name IN ({", ".join(f"'{r}'" for r in restriction)})
-        #        )
-        #    """
+        if restriction:
+            query += f"""
+                AND f.product_id NOT IN (
+                SELECT pa.product_id
+                FROM product_allergy pa
+                JOIN allergy a ON pa.allergy_id = a.allergy_id
+                WHERE a.name IN ({", ".join(f"'{r}'" for r in restriction)})
+                )
+            """
 
         query += f"""
             GROUP BY f.product_id

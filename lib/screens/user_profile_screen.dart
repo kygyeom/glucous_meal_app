@@ -13,7 +13,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   int? age;
   double? height;
   double? weight;
-  String gender = 'M';
+  String gender = 'male';
   String name = 'empty';
 
   Widget buildProgressBar() {
@@ -105,7 +105,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     const Text("성별"),
                     const SizedBox(height: 8),
                     Row(
-                      children: ['M', 'F'].map((option) {
+                      children: ['male', 'female'].map((option) {
                         final selected = gender == option;
                         return Expanded(
                           child: GestureDetector(

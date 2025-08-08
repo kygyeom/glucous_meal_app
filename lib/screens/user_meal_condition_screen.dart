@@ -98,7 +98,7 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
   
     try {
       // 2. API 호출
-      final recommendations = await fetchRecommendations(userProfile);
+      final recommendations = await ApiService.fetchRecommendations(userProfile);
   
       // 3. 로딩 제거
       Navigator.of(context).pop();
@@ -285,11 +285,19 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      onPressed: () {
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (!agreedToTerms) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('개인정보 이용 동의가 필요합니다.'),
+                            duration: Duration(seconds: 1), // ⏱️ 원하는 시간으로 설정 (예: 2초)
+                          ),
+                        );
+                        return;
+                      }
+
+                      if (_formKey.currentState!.validate()) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -310,27 +318,37 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                             ),
                           ),
                         );
-                      },
-                      child: Ink(
-                        decoration: BoxDecoration(
-                          gradient: agreedToTerms
-                              ? const LinearGradient(
-                                  colors: [Color(0xFF00FFD1), Color(0xFF0076FF)],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                )
-                              : null,
-                          color: agreedToTerms ? null : Colors.grey.shade400,
-                          borderRadius: const BorderRadius.all(Radius.circular(24)),
-                        ),
-                        child: const Center(
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: agreedToTerms ? null : Colors.grey.shade400,
+                      padding: const EdgeInsets.all(0),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                    ).copyWith(
+                      backgroundColor: agreedToTerms
+                          ? MaterialStateProperty.resolveWith((states) => null)
+                          : MaterialStateProperty.all(Colors.grey.shade400),
+                      foregroundColor: MaterialStateProperty.all(Colors.white),
+                    ),
+                    child: Ink(
+                      decoration: agreedToTerms
+                          ? const BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Color(0xFF00FFD1), Color(0xFF0076FF)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(24)),
+                            )
+                          : const BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(24)),
+                            ),
+                      child: const Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
                           child: Text(
                             '다음 페이지',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),

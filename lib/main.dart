@@ -15,7 +15,7 @@ class GlucoUSApp extends StatelessWidget {
       title: 'GlucoUS',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.teal, fontFamily: 'NotoSans'),
-      home: const OnboardingScreen(),
+      home: OnboardingScreen(),
     );
   }
 }

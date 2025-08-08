@@ -23,11 +23,11 @@ class UserLifestyleScreen extends StatefulWidget {
 
 class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
   String activityLevel = 'high';
-  String diabetes = '없음';
+  String diabetes = 'none';
   String goal = 'blood_sugar_control';
 
   final List<String> activityOptions = ['low', 'medium', 'high'];
-  final List<String> diabetesOptions = ['제1형 당뇨', '제2형 당뇨', '없음'];
+  final List<String> diabetesOptions = ['T1D', 'T2D', 'none'];
   final List<String> goalOptions = [
     'blood_sugar_control',
     'weight_loss',
@@ -127,8 +127,25 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                     spacing: 8,
                     children: diabetesOptions.map((option) {
                       final selected = diabetes == option;
+                  
+                      // 값(option)에 따라 라벨을 매핑
+                      String displayLabel;
+                      switch (option) {
+                        case 'T1D':
+                          displayLabel = '제1형 당뇨';
+                          break;
+                        case 'T2D':
+                          displayLabel = '제2형 당뇨';
+                          break;
+                        case 'none':
+                          displayLabel = '없음';
+                          break;
+                        default:
+                          displayLabel = option; // fallback
+                      }
+                  
                       return ChoiceChip(
-                        label: Text(option),
+                        label: Text(displayLabel),
                         selected: selected,
                         onSelected: (_) {
                           if (!selected) {
