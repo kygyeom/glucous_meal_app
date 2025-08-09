@@ -1,0 +1,71 @@
+
+// In your State class:
+final _debouncer = Debouncer(delay: const Duration(milliseconds: 350));
+final _results = ValueNotifier<List<String>>([]);
+bool _loading = false;
+String _lastQuery = '';
+
+// Call this in dispose():
+@override
+void dispose() {
+  _debouncer.dispose();
+  _results.dispose();
+  super.dispose();
+}
+
+void _onQueryChanged(String q) {
+  // drop identical queries
+  if (q.trim() == _lastQuery) return;
+  _lastQuery = q.trim();
+
+  _debouncer(() async {
+    if (_lastQuery.length < 2) {
+      _results.value = const [];
+      setState(() => _loading = false);
+      return;
+    }
+    setState(() => _loading = true);
+    final data = await ApiService.searchFoods(_lastQuery);
+    if (mounted && _lastQuery == q.trim()) {
+      _results.value = data;
+      setState(() => _loading = false);
+    }
+  });
+}
+
+
+---
+
+
+Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 16),
+  child: TextField(
+    onChanged: _onQueryChanged,
+    textInputAction: TextInputAction.search,
+    decoration: const InputDecoration(
+      hintText: '음식 이름을 입력하세요 (예: 현미밥)',
+      prefixIcon: Icon(Icons.search),
+      border: OutlineInputBorder(),
+      isDense: true,
+    ),
+  ),
+),
+const SizedBox(height: 12),
+if (_loading) const LinearProgressIndicator(),
+Expanded(
+  child: ValueListenableBuilder<List<String>>(
+    valueListenable: _results,
+    builder: (context, items, _) {
+      if (items.isEmpty && !_loading) {
+        return const Center(child: Text('검색 결과가 없습니다.'));
+      }
+      return ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, i) => ListTile(
+          dense: true,
+          title: Text(items[i], maxLines: 1, overflow: TextOverflow.ellipsis),
+        ),
+      );
+    },
+  ),
+),

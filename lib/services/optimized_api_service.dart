@@ -3,8 +3,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show compute;
 import 'package:http/http.dart' as http;
-import 'package:glucous_meal_app/models/models.dart';
-import 'uuid_service.dart';
 
 // Lightweight LRU cache for search results
 class _LruCache<K, V> {
@@ -32,16 +30,8 @@ class _LruCache<K, V> {
   }
 }
 
-// Top-level function required by `compute`
-List<dynamic> _decodeJsonList(String body) {
-  final data = json.decode(body);
-  if (data is List) return data;
-  if (data is Map && data['results'] is List) return data['results'] as List;
-  return const [];
-}
-
 class ApiService {
-  static const String baseUrl = 'http://127.0.0.1:8000'; // 로컬 서버 주소
+  static const String baseUrl = 'http://127.0.0.1:8000';
 
   // Reuse a single HTTP client for connection pooling + keep-alive
   static final http.Client _client = http.Client();
@@ -52,7 +42,6 @@ class ApiService {
   // Cancel-stale-requests: track the latest token
   static int _searchToken = 0;
 
-  // 음식 검색 결과
   static Future<List<String>> searchFoods(
     String query, {
     Duration timeout = const Duration(seconds: 6),
@@ -102,61 +91,5 @@ class ApiService {
     // 4) cache & return
     _searchCache.set(trimmed, items);
     return items;
-  }
-
-  // 추천 식단 받아오기
-  static Future<List<Recommendation>> fetchRecommendations(
-    UserProfile profile,
-  ) async {
-    final url = Uri.parse('$baseUrl/recommend');
-
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(profile.toJson()),
-    );
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
-      return data.map((item) => Recommendation.fromJson(item)).toList();
-    } else {
-      throw Exception("Failed to load recommendations");
-    }
-  }
-
-  // UUID 기반 유저 등록
-  static Future<void> registerUser(UserProfile profile) async {
-    final uuid = await UUIDService.getOrCreateUUID();
-
-    final Map<String, dynamic> jsonData = profile.toJson();
-    jsonData['uuid'] = uuid;
-
-    final response = await http.post(
-      Uri.parse('$baseUrl/register'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(jsonData),
-    );
-
-    if (response.statusCode == 200) {
-      print("✅ 유저 등록 성공");
-    } else {
-      print("❌ 등록 실패: ${response.body}");
-    }
-  }
-
-  // 3. 유저 정보 확인
-  static Future<void> getUserInfo() async {
-    final uuid = await UUIDService.getOrCreateUUID();
-
-    final response = await http.get(
-      Uri.parse('$baseUrl/user'),
-      headers: {'X-Device-ID': uuid},
-    );
-
-    if (response.statusCode == 200) {
-      print("👤 사용자 정보: ${response.body}");
-    } else {
-      print("❌ 사용자 인증 실패: ${response.body}");
-    }
   }
 }
