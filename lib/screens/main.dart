@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:glucous_meal_app/models/models.dart';
-import 'package:glucous_meal_app/services/api_service.dart';
+import 'package:glucous_meal_app/services/api_service.dart'
+    show ApiService, FoodHit;
 import 'package:glucous_meal_app/services/debouncer.dart';
 import 'package:glucous_meal_app/screens/food_detail_screen.dart';
 
@@ -23,7 +24,7 @@ class _MainState extends State<Main> {
 
   // ── 검색 최적화 상태값 ───────────────────────────────────────────────
   final _debouncer = Debouncer(delay: const Duration(milliseconds: 350));
-  final _results = ValueNotifier<List<String>>([]);
+  final _results = ValueNotifier<List<FoodHit>>(<FoodHit>[]);
   bool _loading = false;
   String _lastQuery = '';
 
@@ -48,7 +49,7 @@ class _MainState extends State<Main> {
       }
       if (mounted) setState(() => _loading = true);
 
-      final data = await ApiService.searchFoods(_lastQuery);
+      final data = await ApiService.searchFoodsWithIds(_lastQuery);
 
       // 최신 입력과 응답이 일치할 때만 반영
       if (!mounted) return;
@@ -160,7 +161,8 @@ class _MainState extends State<Main> {
               ),
 
             // 자동완성 결과
-            ValueListenableBuilder<List<String>>(
+            ValueListenableBuilder<List<FoodHit>>(
+              // ✅ List<String> → List<FoodHit>
               valueListenable: _results,
               builder: (context, items, _) {
                 if (items.isEmpty) {
@@ -179,12 +181,12 @@ class _MainState extends State<Main> {
                   ),
                   child: ListView.builder(
                     itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      final text = items[index];
+                    itemBuilder: (context2, index) {
+                      final hit = items[index]; // ✅ FoodHit 타입
                       return ListTile(
                         dense: true,
                         title: Text(
-                          text,
+                          hit.name, // ✅ 이름 표시
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -192,7 +194,10 @@ class _MainState extends State<Main> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => FoodDetailScreen(foodName: text),
+                              builder: (_) => FoodDetailScreen(
+                                foodName: hit.name,
+                                foodId: hit.id, // ✅ ID도 같이 전달
+                              ),
                             ),
                           );
                         },
@@ -202,9 +207,7 @@ class _MainState extends State<Main> {
                 );
               },
             ),
-
             const SizedBox(height: 8),
-
             const Text(
               '당신을 위한 오늘의 추천 식단',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
