@@ -59,7 +59,7 @@ class _BetaTestCodeScreen extends State<BetaTestCodeScreen> {
               ),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
-                widthFactor: 1.0,
+                widthFactor: 0.9,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,

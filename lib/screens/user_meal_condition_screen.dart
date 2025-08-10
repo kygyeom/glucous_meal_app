@@ -47,6 +47,16 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
 
   List<String> allergyOptions = ['None', 'Dairy', 'Nuts', 'Shellfish', 'Meat', 'Seafood', 'Other'];
   List<String> selectedAllergies = ['None'];
+  // 영어 → 한글 매핑
+  final Map<String, String> allergyLabels = {
+    'None': '없음',
+    'Dairy': '유제품',
+    'Nuts': '견과류',
+    'Shellfish': '갑각류',
+    'Meat': '육류',
+    'Seafood': '해산물',
+    'Other': '기타',
+  };
 
   void toggleSelection(String item, List<String> selectedList, void Function(List<String>) updateState) {
     setState(() {
@@ -171,7 +181,7 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
               ),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
-                widthFactor: 1.0,
+                widthFactor: 0.5,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,
@@ -216,16 +226,16 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                           childAspectRatio: 3,
                           physics: const NeverScrollableScrollPhysics(),
                           children: [
-                            buildChip('Vegetarian', selectedRestrictions.contains('Vegetarian'), () {
+                            buildChip('채식주의', selectedRestrictions.contains('Vegetarian'), () {
                               toggleSelection('Vegetarian', selectedRestrictions, (v) => selectedRestrictions = v);
                             }, emoji: '🥕'),
-                            buildChip('Halal', selectedRestrictions.contains('Halal'), () {
+                            buildChip('할랄', selectedRestrictions.contains('Halal'), () {
                               toggleSelection('Halal', selectedRestrictions, (v) => selectedRestrictions = v);
                             }, emoji: '🐓'),
-                            buildChip('Gluten-free', selectedRestrictions.contains('Gluten-free'), () {
+                            buildChip('글루텐 프리', selectedRestrictions.contains('Gluten-free'), () {
                               toggleSelection('Gluten-free', selectedRestrictions, (v) => selectedRestrictions = v);
                             }, emoji: '🌾'),
-                            buildChip('None', selectedRestrictions.contains('None'), () {
+                            buildChip('없음', selectedRestrictions.contains('None'), () {
                               toggleSelection('None', selectedRestrictions, (v) => selectedRestrictions = v);
                             }, emoji: '❌'),
                           ],
@@ -236,11 +246,13 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: allergyOptions.map((item) => buildChip(
-                            item,
-                            selectedAllergies.contains(item),
-                            () => toggleSelection(item, selectedAllergies, (v) => selectedAllergies = v),
-                          )).toList(),
+                          children: allergyOptions.map((item) {
+                            return buildChip(
+                              allergyLabels[item] ?? item, // 화면에는 한글 표시
+                              selectedAllergies.contains(item), // 선택 로직은 영어 유지
+                              () => toggleSelection(item, selectedAllergies, (v) => selectedAllergies = v),
+                            );
+                          }).toList(),
                         ),
                         const SizedBox(height: 12),
                         const Text(

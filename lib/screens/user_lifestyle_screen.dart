@@ -101,6 +101,7 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
+                    runSpacing: 12,
                     children: activityOptions.map((option) {
                       final selected = activityLevel == option;
                       final label = option == 'low'
@@ -116,6 +117,11 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                         selectedColor: const Color(0xFFF4F4F4),
                         labelStyle: TextStyle(
                           color: selected ? Colors.black : Colors.black,
+                        ),
+                        showCheckmark: false,
+                        labelPadding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 2,
                         ),
                       );
                     }).toList(),
@@ -156,6 +162,11 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                         labelStyle: TextStyle(
                           color: selected ? Colors.black : Colors.black,
                         ),
+                        showCheckmark: false,
+                        labelPadding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 2,
+                        ),
                       );
                     }).toList(),
                   ),
@@ -178,6 +189,11 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                         selectedColor: const Color(0xFFF4F4F4),
                         labelStyle: TextStyle(
                           color: selected ? Colors.black : Colors.black,
+                        ),
+                        showCheckmark: false,
+                        labelPadding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 2,
                         ),
                       );
                     }).toList(),

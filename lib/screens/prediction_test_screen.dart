@@ -62,7 +62,7 @@ class _PredictionTestScreen extends State<PredictionTestScreen> {
               ),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
-                widthFactor: 1.0,
+                widthFactor: 0.7,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,

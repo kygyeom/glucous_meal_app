@@ -63,7 +63,7 @@ class _UserMealInfoScreenState extends State<UserMealInfoScreen> {
               ),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
-                widthFactor: 1.0,
+                widthFactor: 0.4,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,
@@ -107,10 +107,10 @@ class _UserMealInfoScreenState extends State<UserMealInfoScreen> {
                     crossAxisSpacing: 8,
                     childAspectRatio: 3,
                     children: [
-                      buildChip('Breakfast', '🍳'),
-                      buildChip('Lunch', '🥗'),
-                      buildChip('Dinner', '🍽️'),
-                      buildChip('Snacks', '🍪'),
+                      buildChip('아침', '🍳'),
+                      buildChip('점심', '🥗'),
+                      buildChip('저녁', '🍽️'),
+                      buildChip('간식', '🍪'),
                     ],
                   ),
                   const SizedBox(height: 24),

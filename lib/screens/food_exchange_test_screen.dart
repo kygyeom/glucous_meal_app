@@ -38,6 +38,7 @@ class FoodExchangeTestScreen extends StatefulWidget {
 }
 
 class _FoodExchangeTestScreen extends State<FoodExchangeTestScreen> {
+
   Widget buildProgressBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -58,7 +59,7 @@ class _FoodExchangeTestScreen extends State<FoodExchangeTestScreen> {
               ),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
-                widthFactor: 1.0,
+                widthFactor: 0.8,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,

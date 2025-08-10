@@ -48,7 +48,7 @@ class _ResearchResultScreenState extends State<ResearchResultScreen> {
               ),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
-                widthFactor: 1.0,
+                widthFactor: 0.3,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,

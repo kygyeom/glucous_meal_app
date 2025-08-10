@@ -60,7 +60,7 @@ class _FoodSearchTestScreen extends State<FoodSearchTestScreen> {
               ),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
-                widthFactor: 1.0,
+                widthFactor: 0.6,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,
