@@ -89,7 +89,10 @@ class _UserMealInfoScreenState extends State<UserMealInfoScreen> {
             buildProgressBar(context),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 8,
+                ),
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   const Text(
@@ -107,10 +110,10 @@ class _UserMealInfoScreenState extends State<UserMealInfoScreen> {
                     crossAxisSpacing: 8,
                     childAspectRatio: 3,
                     children: [
-                      buildChip('아침', '🍳'),
-                      buildChip('점심', '🥗'),
-                      buildChip('저녁', '🍽️'),
-                      buildChip('간식', '🍪'),
+                      buildChip('Breakfast', '🍳', label: '아침'),
+                      buildChip('Lunch', '🥗', label: '점심'),
+                      buildChip('Dinner', '🍽️', label: '저녁'),
+                      buildChip('Snack', '🍪', label: '간식'),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -118,16 +121,18 @@ class _UserMealInfoScreenState extends State<UserMealInfoScreen> {
                   const SizedBox(height: 4),
                   Wrap(
                     children: ['직접 요리', '외식', '배달 위주']
-                        .map((method) => buildChip(
-                              method == '직접 요리'
-                                  ? 'Direct cooking'
-                                  : method == '외식'
-                                      ? 'Eating out'
-                                      : 'Delivery based',
-                              null,
-                              label: method,
-                              isMethod: true,
-                            ))
+                        .map(
+                          (method) => buildChip(
+                            method == '직접 요리'
+                                ? 'Direct cooking'
+                                : method == '외식'
+                                ? 'Eating out'
+                                : 'Delivery based',
+                            null,
+                            label: method,
+                            isMethod: true,
+                          ),
+                        )
                         .toList(),
                   ),
                   const SizedBox(height: 24),
@@ -196,7 +201,12 @@ class _UserMealInfoScreenState extends State<UserMealInfoScreen> {
     );
   }
 
-  Widget buildChip(String value, String? emoji, {String? label, bool isMethod = false}) {
+  Widget buildChip(
+    String value,
+    String? emoji, {
+    String? label,
+    bool isMethod = false,
+  }) {
     final bool selected = isMethod
         ? selectedMealMethod == value
         : selectedMeals.contains(value);
@@ -213,7 +223,9 @@ class _UserMealInfoScreenState extends State<UserMealInfoScreen> {
         margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
         decoration: BoxDecoration(
           color: selected ? Color(0xFFF4F4F4) : Colors.grey[200],
-          border: Border.all(color: selected ? Colors.black : Colors.transparent),
+          border: Border.all(
+            color: selected ? Colors.black : Colors.transparent,
+          ),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(

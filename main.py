@@ -11,13 +11,13 @@ import pandas as pd
 from mysql import connector
 from dotenv import load_dotenv
 
-from query import build_food_query
+from query import build_food_query, build_food_allergy_query
 from model import load_model_normalizer, predict_dict, load_model
 from preprocess import Normalizer
 from fat_secret import get_token
 
 
-DB_COLUMNS= ['name', 'brand', 'calories_kcal', 'protein_g', 'carbohydrate_g', 'fat_g', 'sugar_g', 'saturated_fat_g', 'sodium_mg', 'fiber_g', 'allergy', 'price', 'shipping_fee', 'link']
+DB_COLUMNS= ['food_id', 'name', 'brand', 'calories_kcal', 'protein_g', 'carbohydrate_g', 'fat_g', 'sugar_g', 'saturated_fat_g', 'sodium_mg', 'fiber_g', 'allergy', 'price', 'shipping_fee', 'link', 'ingredients']
 MODEL_PATH = "./saved_models/BM25CosSim_model.pkl"
 MAX_GLUCOSE_MODEL_PATH = "./saved_models/XGB_g_max.pkl"
 DELTA_GLUCOSE_MODEL_PATH = "./saved_models/XGB_delta_g.pkl"
@@ -189,6 +189,7 @@ def max_glucose_ai_forecast(
 @app.post("/recommend", response_model=List[Recommendation])
 def recommend_meals(user: UserProfile):
     try:
+
         # Filter foods customer cannot eat
         restriction = restrict_foods(user)
 
@@ -226,6 +227,7 @@ def recommend_meals(user: UserProfile):
         # Recommend Foods
         recommend_data = [
             {
+                "food_id": row.food_id,
                 "food_name": row.name,
                 "food_group": recommend[0],
                 "price": row.price,
@@ -241,9 +243,22 @@ def recommend_meals(user: UserProfile):
                     "saturated_fat": row.saturated_fat_g,
                     "sodium": row.sodium_mg,
                     "fiber": row.fiber_g,
-                }
+                },
+                "ingredients": row.ingredients
             } for row in df.itertuples(index=False)
         ]
+
+        query = build_food_allergy_query(recommend_data)
+        cursor.execute(query)
+        results = cursor.fetchall()
+        df = pd.DataFrame(
+            results,
+            columns=['product_id', 'allergies']
+        )
+
+        allergies = df['allergies'].to_list()
+        for idx, allergy in enumerate(allergies):
+            recommend_data[idx]['allergy'] = allergy
 
         return JSONResponse(
             content=recommend_data,

@@ -126,7 +126,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               ),
                               child: Center(
                                 child: Text(
-                                  option == 'M' ? '남성' : '여성',
+                                  option == 'male' ? '남성' : '여성',
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
