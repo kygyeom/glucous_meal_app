@@ -78,6 +78,8 @@ class Recommendation {
   final double price;
   final double shippingFee;
   final Map<String, dynamic> nutrition;
+  final String ingredients;
+  final String allergies;
 
   Recommendation({
     required this.foodName,
@@ -87,6 +89,8 @@ class Recommendation {
     required this.price,
     required this.shippingFee,
     required this.nutrition,
+    required this.ingredients,
+    required this.allergies,
   });
 
   factory Recommendation.fromJson(Map<String, dynamic> json) {
@@ -98,6 +102,8 @@ class Recommendation {
       price: (json['price'] as num).toDouble(),
       shippingFee: (json['shipping_fee'] as num).toDouble(),
       nutrition: Map<String, dynamic>.from(json['nutrition']),
+      ingredients: json['ingredients'],
+      allergies: json['allergy'],
     );
   }
 }

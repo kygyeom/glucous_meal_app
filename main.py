@@ -454,6 +454,7 @@ def search_foods(query: str = Query(...)):
     # 2) JSON 파싱 (비-JSON 방어)
     try:
         data = resp.json()
+
     except Exception:
         snippet = resp.text[:300].replace("\n", " ")
         raise HTTPException(status_code=502, detail=f"FatSecret returned non-JSON: {snippet}")
@@ -489,6 +490,7 @@ def search_foods(query: str = Query(...)):
             food_ids.append(fid)
 
     return {"food_names": food_names, "food_ids": food_ids}
+
 
 @app.get("/food")
 def get_food_detail(food_id: str = Query(...)):

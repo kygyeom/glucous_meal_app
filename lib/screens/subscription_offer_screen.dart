@@ -7,7 +7,6 @@ import 'package:glucous_meal_app/services/api_service.dart';
 import 'glucous_loading_screen.dart';
 import 'main.dart';
 
-
 class SubscriptionOfferScreen extends StatefulWidget {
   final String name;
   final int age;
@@ -46,18 +45,20 @@ class SubscriptionOfferScreen extends StatefulWidget {
 
 class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
   late VideoPlayerController _controller;
-  String selectedPlan = 'monthly'; // 'monthly' or 'yearly'
+  String selectedPlan = 'basic'; // 'basic' or 'pro'
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4', // 실제 영상 링크
-    )..initialize().then((_) {
-        setState(() {});
-        _controller.play();
-        _controller.setLooping(true);
-      });
+    _controller =
+        VideoPlayerController.network(
+            'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4', // 실제 영상 링크
+          )
+          ..initialize().then((_) {
+            setState(() {});
+            _controller.play();
+            _controller.setLooping(true);
+          });
   }
 
   @override
@@ -97,7 +98,7 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
     startSubscription();
     loadRecommendation(userProfile);
   }
- 
+
   void startSubscription() {
     // 실제 결제 로직 연동 (Google Play / App Store)
     // final productId = selectedPlan == 'monthly'
@@ -113,25 +114,25 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
 
     try {
       // 2. API 호출
-      final recommendations = await ApiService.fetchRecommendations(userProfile);
-  
+      final recommendations = await ApiService.fetchRecommendations(
+        userProfile,
+      );
+
       // 3. 로딩 제거
       Navigator.of(context).pop();
-  
+
       // 4. 결과 페이지로 이동
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => Main(
-            username: '홍길동',
-            recommendations: recommendations,
-          ),
+          builder: (context) =>
+              Main(username: '홍길동', recommendations: recommendations),
         ),
       );
     } catch (e) {
       Navigator.of(context).pop(); // 로딩 제거
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('추천 실패: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('추천 실패: $e')));
     }
   }
 
@@ -146,7 +147,10 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
                     aspectRatio: _controller.value.aspectRatio,
                     child: VideoPlayer(_controller),
                   )
-                : const SizedBox(height: 200, child: Center(child: CircularProgressIndicator())),
+                : const SizedBox(
+                    height: 200,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
 
             const SizedBox(height: 24),
             const Text(
@@ -161,26 +165,28 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
               child: Row(
                 children: [
                   _buildPlanCard(
-                    title: '월간 구독',
-                    price: '4,999 원 / 월',
-                    selected: selectedPlan == 'monthly',
+                    title: '베이직',
+                    price: '5,999 원 / 월',
+                    selected: selectedPlan == '',
                     onTap: () => setState(() => selectedPlan = 'monthly'),
                   ),
                   const SizedBox(width: 12),
                   _buildPlanCard(
-                    title: '연간 구독',
-                    price: '3,999 원 / 월',
-                    badgeText: '10% 절약',
-                    selected: selectedPlan == 'yearly',
-                    onTap: () => setState(() => selectedPlan = 'yearly'),
+                    title: '프로',
+                    price: '12,000 원 / 월',
+                    // badgeText: '10% 절약',
+                    selected: selectedPlan == 'pro',
+                    onTap: () => setState(() => selectedPlan = 'pro'),
                   ),
                 ],
               ),
             ),
 
             const SizedBox(height: 20),
-            const Text('결제 전 알림을 보내드릴게요!',
-                style: TextStyle(fontSize: 13, color: Colors.grey)),
+            const Text(
+              '결제 전 알림을 보내드릴게요!',
+              style: TextStyle(fontSize: 13, color: Colors.grey),
+            ),
 
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
@@ -217,7 +223,7 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -248,13 +254,14 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
             children: [
               Text(title, style: const TextStyle(color: Colors.grey)),
               const SizedBox(height: 8),
-              Text(price,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(price, style: const TextStyle(fontWeight: FontWeight.bold)),
               if (badgeText != null) ...[
                 const SizedBox(height: 8),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFF00FFC2),
                     borderRadius: BorderRadius.circular(10),
@@ -268,7 +275,7 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
                     ),
                   ),
                 ),
-              ]
+              ],
             ],
           ),
         ),

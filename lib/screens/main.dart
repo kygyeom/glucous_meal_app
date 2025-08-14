@@ -4,6 +4,7 @@ import 'package:glucous_meal_app/services/api_service.dart'
     show ApiService, FoodHit;
 import 'package:glucous_meal_app/services/debouncer.dart';
 import 'package:glucous_meal_app/screens/food_detail_screen.dart';
+import 'package:glucous_meal_app/screens/rec_detail_screen.dart';
 
 class Main extends StatefulWidget {
   final String username;
@@ -27,6 +28,14 @@ class _MainState extends State<Main> {
   final _results = ValueNotifier<List<FoodHit>>(<FoodHit>[]);
   bool _loading = false;
   String _lastQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      if (mounted) setState(() {}); // ← X 버튼 표시/숨김 업데이트
+    });
+  }
 
   @override
   void dispose() {
@@ -143,6 +152,17 @@ class _MainState extends State<Main> {
                         ),
                       ),
                     ),
+                    if (_controller.text.isNotEmpty)
+                      IconButton(
+                        icon: const Icon(Icons.clear, color: Colors.grey),
+                        splashRadius: 18,
+                        onPressed: () {
+                          _controller.clear();
+                          _onQueryChanged('');
+                          _results.value = const [];
+                          if (mounted) setState(() => _loading = false);
+                        },
+                      ),
                   ],
                 ),
               ),
@@ -190,7 +210,7 @@ class _MainState extends State<Main> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        onTap: () {
+                        onTap: () async {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -229,54 +249,66 @@ class _MainState extends State<Main> {
                   itemCount: widget.recommendations.length,
                   itemBuilder: (context, index) {
                     final meal = widget.recommendations[index];
-                    return Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            meal.foodName,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
+                    return InkWell(
+                      // ← 클릭 가능하게 변경
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => RecDetailScreen(rec: meal),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black, width: 1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              meal.foodName,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 12),
-                          Column(
-                            children: [
-                              Text(
-                                '칼로리',
-                                style: TextStyle(color: Colors.grey.shade700),
-                              ),
-                              Text(
-                                '${meal.nutrition['calories']}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
+                            const SizedBox(height: 12),
+                            Column(
+                              children: [
+                                Text(
+                                  '칼로리',
+                                  style: TextStyle(color: Colors.grey.shade700),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Column(
-                            children: [
-                              Text(
-                                '탄수화물',
-                                style: TextStyle(color: Colors.grey.shade700),
-                              ),
-                              Text(
-                                '${meal.nutrition['carbs']}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
+                                Text(
+                                  '${meal.nutrition['calories']}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Column(
+                              children: [
+                                Text(
+                                  '탄수화물',
+                                  style: TextStyle(color: Colors.grey.shade700),
+                                ),
+                                Text(
+                                  '${meal.nutrition['carbs']}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

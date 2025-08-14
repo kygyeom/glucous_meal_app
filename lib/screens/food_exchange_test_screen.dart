@@ -38,7 +38,6 @@ class FoodExchangeTestScreen extends StatefulWidget {
 }
 
 class _FoodExchangeTestScreen extends State<FoodExchangeTestScreen> {
-
   Widget buildProgressBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -91,10 +90,7 @@ class _FoodExchangeTestScreen extends State<FoodExchangeTestScreen> {
                 child: Text(
                   '마음에 드는 식재료로\n교환하기',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -170,9 +166,18 @@ class _FoodExchangeTestScreen extends State<FoodExchangeTestScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: SizedBox(
-                width: double.infinity,
+                width: MediaQuery.of(context).size.width * 0.9,
                 height: 48,
                 child: ElevatedButton(
+                  clipBehavior: Clip.antiAlias, // ⬅️ 버튼 경계 밖으로 안 나가게
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24), // 버튼 모양
+                    ),
+                    elevation: 4,
+                    shadowColor: Colors.black.withOpacity(0.25),
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -237,9 +242,7 @@ class _IngredientChip extends StatelessWidget {
       avatar: Text(icon, style: const TextStyle(fontSize: 16)),
       label: Text(label),
       backgroundColor: Colors.grey.shade200,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     );
   }
 }
@@ -270,10 +273,7 @@ class _FoodCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              )),
+          Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Text('Calories  $calories'),
           Text('Carb       $carbs'),
@@ -287,10 +287,7 @@ class _FoodCard extends StatelessWidget {
               ),
               child: const Text(
                 '더 알아보기',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.white),
               ),
             ),
         ],
