@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:glucous_meal_app/models/models.dart';
 import 'package:glucous_meal_app/services/api_service.dart'
@@ -111,7 +112,7 @@ class _MainState extends State<Main> {
 
             const SizedBox(height: 20),
             const Text(
-              '더 이상 혼자 관리하지\n않아도 괜찮아요 :)',
+              "You're not alone in this anymore :)",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
@@ -297,6 +298,327 @@ class _MainState extends State<Main> {
                               children: [
                                 Text(
                                   '탄수화물',
+                                  style: TextStyle(color: Colors.grey.shade700),
+                                ),
+                                Text(
+                                  '${meal.nutrition['carbs']}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+*/
+
+import 'package:flutter/material.dart';
+import 'package:glucous_meal_app/models/models.dart';
+import 'package:glucous_meal_app/services/api_service.dart'
+    show ApiService, FoodHit;
+import 'package:glucous_meal_app/services/debouncer.dart';
+import 'package:glucous_meal_app/screens/food_detail_screen.dart';
+import 'package:glucous_meal_app/screens/rec_detail_screen.dart';
+
+class Main extends StatefulWidget {
+  final String username;
+  final List<Recommendation> recommendations;
+
+  const Main({
+    super.key,
+    required this.username,
+    required this.recommendations,
+  });
+
+  @override
+  State<Main> createState() => _MainState();
+}
+
+class _MainState extends State<Main> {
+  final TextEditingController _controller = TextEditingController();
+
+  // ── Search optimization state ───────────────────────────────────────
+  final _debouncer = Debouncer(delay: const Duration(milliseconds: 350));
+  final _results = ValueNotifier<List<FoodHit>>(<FoodHit>[]);
+  bool _loading = false;
+  String _lastQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      if (mounted) setState(() {}); // Update X button visibility
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _debouncer.dispose();
+    _results.dispose();
+    super.dispose();
+  }
+
+  void _onQueryChanged(String q) {
+    final next = q.trim();
+    if (next == _lastQuery) return; // Ignore same query
+    _lastQuery = next;
+
+    _debouncer(() async {
+      if (_lastQuery.length < 2) {
+        _results.value = const [];
+        if (mounted) setState(() => _loading = false);
+        return;
+      }
+      if (mounted) setState(() => _loading = true);
+
+      final data = await ApiService.searchFoodsWithIds(_lastQuery);
+
+      // Apply only if response matches the latest query
+      if (!mounted) return;
+      if (_lastQuery == next) {
+        _results.value = data;
+        setState(() => _loading = false);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: IconButton(
+              icon: const Icon(Icons.menu, color: Colors.black),
+              onPressed: () {},
+            ),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
+
+            // Top gradient bar
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                height: 6,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF4A90E2), Color(0xFF00FFD1)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+            const Text(
+              "You're not alone in this anymore :)",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              '- ${widget.username} -',
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+
+            const SizedBox(height: 24),
+            const Text(
+              "Want to know more about your meals?",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 12),
+
+            // Search input
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    const Icon(Icons.search, color: Colors.grey),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: _controller,
+                        onChanged: _onQueryChanged, // Optimized handler
+                        textInputAction: TextInputAction.search,
+                        decoration: const InputDecoration(
+                          hintText: "Search for any food you’re interested in",
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    if (_controller.text.isNotEmpty)
+                      IconButton(
+                        icon: const Icon(Icons.clear, color: Colors.grey),
+                        splashRadius: 18,
+                        onPressed: () {
+                          _controller.clear();
+                          _onQueryChanged('');
+                          _results.value = const [];
+                          if (mounted) setState(() => _loading = false);
+                        },
+                      ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Loading indicator
+            if (_loading)
+              const Padding(
+                padding: EdgeInsets.only(top: 8, left: 24, right: 24),
+                child: LinearProgressIndicator(
+                  backgroundColor: Color(0xFFD0E8FF),
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00B8D4)),
+                ),
+              ),
+
+            // Autocomplete results
+            ValueListenableBuilder<List<FoodHit>>(
+              valueListenable: _results,
+              builder: (context, items, _) {
+                if (items.isEmpty) {
+                  return const SizedBox(height: 8);
+                }
+                return Container(
+                  height: 168,
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ListView.builder(
+                    itemCount: items.length,
+                    itemBuilder: (context2, index) {
+                      final hit = items[index];
+                      return ListTile(
+                        dense: true,
+                        title: Text(
+                          hit.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        onTap: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => FoodDetailScreen(
+                                foodName: hit.name,
+                                foodId: hit.id,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              "Today’s Personalized Meal Picks",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+
+            // Recommended meals grid
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: GridView.builder(
+                  padding: const EdgeInsets.only(bottom: 32),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 0.85,
+                  ),
+                  itemCount: widget.recommendations.length,
+                  itemBuilder: (context, index) {
+                    final meal = widget.recommendations[index];
+                    return InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => RecDetailScreen(rec: meal),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black, width: 1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              meal.foodName,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Column(
+                              children: [
+                                Text(
+                                  "Calories",
+                                  style: TextStyle(color: Colors.grey.shade700),
+                                ),
+                                Text(
+                                  '${meal.nutrition['calories']}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Column(
+                              children: [
+                                Text(
+                                  "Carbs",
                                   style: TextStyle(color: Colors.grey.shade700),
                                 ),
                                 Text(

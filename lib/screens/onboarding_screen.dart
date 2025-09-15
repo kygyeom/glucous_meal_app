@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'user_profile_screen.dart';
 
@@ -91,6 +92,124 @@ class OnboardingScreen extends StatelessWidget {
                         child: const Center(
                           child: Text(
                             '시작하기',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.03),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+*/
+
+import 'package:flutter/material.dart';
+import 'user_profile_screen.dart';
+
+class OnboardingScreen extends StatelessWidget {
+  const OnboardingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Background image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/onboarding_bg.png', // ← Adjust the file path as needed
+              fit: BoxFit.cover,
+            ),
+          ),
+          // Dark overlay
+          Positioned.fill(
+            child: Container(color: Colors.black.withOpacity(0.4)),
+          ),
+          // Content
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 36,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShaderMask(
+                    shaderCallback: (bounds) =>
+                        const LinearGradient(
+                          begin: Alignment.topLeft, // ↘ diagonal start
+                          end: Alignment.bottomRight, // ↘ diagonal end
+                          colors: [Color(0xFF0076FF), Color(0xFF00FFD1)],
+                        ).createShader(
+                          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+                        ),
+                    child: const Text(
+                      'Welcome to GlucoUS!',
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white, // Ignored due to ShaderMask
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "No more worries about your meals.\n"
+                    "Personalized diets and blood glucose predictions,\n"
+                    "all in one place for diabetes care.\n"
+                    "Start your healthy eating journey with GlucoUS today.",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      height: 1.6,
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UserProfileScreen(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                      ),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF00FFD1), Color(0xFF0076FF)],
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Get Started',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
