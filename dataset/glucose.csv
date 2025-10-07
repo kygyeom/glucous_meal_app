@@ -1,0 +1,301 @@
+userName,foodName,calories,fat(g),saturatedFat(g),transFat(g),carbs,protein(g),sodium(mg),sugars(g),fiber(g),g0,gDeltaMax,gDelta1hour,gDelta2hour,gDelta3hour
+glucosegoddess,pumpkin spice latte,390,14,9,0.5,-1,14,230,50,0,-1,50,40,15,10
+glucosegoddess,pizza,366,11,-1,-1,48,14,48,7,7,-1,55,50,40,50
+glucosegoddess,well cooked pasta|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|45|40|47|43
+glucosegoddess,milk latte|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|15,8.3,5,10
+glucosegoddess,al delte pasta|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|46.7,46.7,30,35
+glucosegoddess,carrot juice|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|48.3,48.3,-15,-13.3
+glucosegoddess,celery juice|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|3.3,0,1.7,1.7
+glucosegoddess,potato fries|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|48.3,43.3,5,6.7
+glucosegoddess,sweet potato fries|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|48.3,40,13.3,16.7
+glucosegoddess,ice cream|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|46.7,18.3,33.3,46.7
+glucosegoddess,2 slices of pineapple|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|40,25,-3.3,-5
+glucosegoddess,sushi roll|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|40,36.7,-13.3,-21.7
+glucosegoddess,coffee with 2 tsp white sugar|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|46.7,38.3,0,16.7
+glucosegoddess,coffee with 2 tsp brown sugar|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|41.7,40,-13.3,1.7
+glucosegoddess,GT's lemon berry kombucha|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|36.7,31.7,-13.3,0
+glucosegoddess,home made kombucha|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|11.7,-5,-1.7,0
+glucosegoddess,a piece of baguette|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|11.7,-5,-1.7,0
+glucosegoddess,instant noodles|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|63.3,45,1.7,0
+glucosegoddess,banana and strawberry smoothie|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|71.7,53.3,15,-8.3
+glucosegoddess,whole fruit smoothie|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|43.3,13.3,25,41.7
+glucosegoddess,trail mix|100|-1|-1|-1|-1|-1|-1|-1|-1|-1,40,40,-1.7,-6.7
+glucosegoddess,toast with jam|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|35,33.3,3.3,-6.7
+glucosegoddess,toast with sugar-free almond butter|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|8.3,5,3.3,0
+glucosegoddess,orange juice|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|35,35,3.3,8.3
+glucosegoddess,grapefruit juice|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|26.7,26.7,6.7,11.7
+glucosegoddess,lemon juice|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|3.3,3.3,-5,-3.3
+glucosegoddess,250ml tomato juice|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|21.7,18.3,-5,0
+glucosegoddess,250g totato|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|3.3,-3.3,0,3.3
+glucosegoddess,avocado toast|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|16.7,8.3,8.3,10
+glucosegoddess,fuji apple|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|40,38.3,5,3.3
+glucosegoddess,opal apple|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|28.3,28.3,5,3.3
+glucosegoddess,granny smith apple|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|16.7,15,-5,-1.7
+glucosegoddess,oatmeal|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|60,50,55,18.3
+glucosegoddess,chocolate tahini porridge|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|30,25,16.7,10
+glucosegoddess,donut|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|68.3,66.7,-13.3,-3.3
+glucosegoddess,100g raisins|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|76.7,63.3,-13.3,-3.3
+glucosegoddess,100g grapes|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|41.7,11.7,-8.3,-5
+glucosegoddess,chickpeas|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|26.7,21.7,10,0
+glucosegoddess,mixed chickpeas|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|41.6,40,6.7,18.3
+glucosegoddess,hummus|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|15,11.7,8.3,5
+glucosegoddess,chocolate biscuits|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|61.7,58.3,6.7,1.7
+glucosegoddess,ripe banana|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|63.3,46.7,-16.7,-15
+glucosegoddess,unripe banana|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|21.7,20,3.3,1.6
+glucosegoddess,tortilla chips|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|63.3,61.7,25,16.7
+glucosegoddess,tortilla chips with guacamole|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|33.3,25,13.3,21.7
+glucosegoddess,potato chips (Lays Classic)|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|43.3,36.7,1.7,-1.7
+glucosegoddess,potato chips (Lays Salt & Vinegar)|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|30,23.3,-1.7,1.7
+glucosegoddess,pancakes|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|58.3,55,11.7,10
+glucosegoddess,50g white bread|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|35,25,-5,-8.3
+glucosegoddess,50g sourdough bread|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|23.3,23.3,10,-3.3
+glucosegoddess,50g nuts and seeds bread|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|8.3,8.3,6.7,3.3
+glucosegoddess,mac and cheese|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|46.7,26.7,36.7,21.7
+glucosegoddess,1teaspoon honey|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|56.7,55,5,3.3
+glucosegoddess,M&M chocolate|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|61.7,61.7,-16.7,-16.7
+glucosegoddess,cookie|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|53.3,33.3,13.3,6.7
+glucosegoddess,croissant|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|45,35,-28,-8
+glucosegoddess,rice cake|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|75,55,15,-3
+glucosegoddess,coca-cola|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|78.3,16.7,21.7,-8.3
+glucosegoddess,chocolate sorbet|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|39,20,31,-8
+glucosegoddess,chocolate ice cream|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|29,15,18,23
+glucosegoddess,pain au chocolat|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|70,56.7,46.7,-1.7
+glucosegoddess,bowl of spaghetti|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|49,46,24,4
+glucosegoddess,Nutella crepe|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|73,73,13,18
+glucosegoddess,Omelet and avocado|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|4,-2,3,3
+glucosegoddess,2 melon slices|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|49,45,13,-5
+glucosegoddess,veggie lasagna|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|44,23,44,38
+glucosegoddess,chocolate cake slice|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|53.3,50,45,20
+glucosegoddess,sleepy girl mocktail|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|30,8.3,8.3,0
+glucosegoddess,bowl of rice|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|30,15,-5,-15
+glucosegoddess,mango|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|20,18,-6,-10
+glucosegoddess,dried mango|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|52,40,50,25
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
+glucosegoddess,|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|
