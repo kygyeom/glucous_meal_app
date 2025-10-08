@@ -51,22 +51,38 @@ class UserProfile {
   }
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
+    print("🔍 Parsing UserProfile from JSON: $json");
+
     return UserProfile(
-      name: json['name'],
-      age: json['age'],
-      gender: json['gender'],
-      weight: json['weight'],
-      height: json['height'],
-      bmi: json['bmi'],
-      activityLevel: json['activity_level'],
-      goal: json['goal'],
-      diabetes: json['diabetes'],
-      meals: json['meals'],
-      mealMethod: json['mealMethod'],
-      dietaryRestrictions: json['dietaryRestrictions'],
-      allergies: json['allergies'],
-      averageGlucose: (json['average_glucose'] as num).toDouble(),
+      name: json['name'] ?? '',
+      age: json['age'] ?? 0,
+      gender: json['gender'] ?? '',
+      weight: (json['weight'] as num?)?.toDouble() ?? 0.0,
+      height: (json['height'] as num?)?.toDouble() ?? 0.0,
+      bmi: (json['bmi'] as num?)?.toDouble() ?? 0.0,
+      activityLevel: json['activity_level'] ?? '',
+      goal: json['goal'] ?? '',
+      diabetes: json['diabetes'] ?? '',
+      meals: json['meals'] is List
+          ? List<String>.from(json['meals'])
+          : [],
+      mealMethod: json['meal_method'] ?? '',
+      dietaryRestrictions: json['dietary_restrictions'] is List
+          ? List<String>.from(json['dietary_restrictions'])
+          : [],
+      allergies: json['allergies'] is List
+          ? List<String>.from(json['allergies'])
+          : [],
+      averageGlucose: (json['average_glucose'] as num?)?.toDouble() ?? 0.0,
     );
+  }
+
+  @override
+  String toString() {
+    return 'UserProfile(name: $name, age: $age, gender: $gender, height: $height, weight: $weight, '
+        'bmi: $bmi, activityLevel: $activityLevel, goal: $goal, diabetes: $diabetes, '
+        'meals: $meals, mealMethod: $mealMethod, dietaryRestrictions: $dietaryRestrictions, '
+        'allergies: $allergies, averageGlucose: $averageGlucose)';
   }
 }
 

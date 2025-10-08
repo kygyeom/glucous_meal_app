@@ -123,13 +123,13 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
 
       // 4. Navigate to results page
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => Main(username: 'John Doe')),
+        MaterialPageRoute(builder: (context) => Main(username: widget.name)),
       );
     } catch (e) {
       Navigator.of(context).pop(); // remove loading
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Recommendation failed: $e')));
+      ).showSnackBar(SnackBar(content: Text('추천 실패: $e')));
     }
   }
 
@@ -151,7 +151,7 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
 
             const SizedBox(height: 24),
             const Text(
-              'Start your 4-week free trial',
+              '4주 무료 체험 시작하기',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
@@ -162,16 +162,16 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
               child: Row(
                 children: [
                   _buildPlanCard(
-                    title: 'Basic',
-                    price: '\$5.99 / month',
+                    title: '베이직',
+                    price: '\$5.99 / 월',
                     selected: selectedPlan == 'monthly',
                     onTap: () => setState(() => selectedPlan = 'monthly'),
                   ),
                   const SizedBox(width: 12),
                   _buildPlanCard(
-                    title: 'Pro',
-                    price: '\$12.00 / month',
-                    // badgeText: 'Save 10%',
+                    title: '프로',
+                    price: '\$12.00 / 월',
+                    // badgeText: '10% 절약',
                     selected: selectedPlan == 'pro',
                     onTap: () => setState(() => selectedPlan = 'pro'),
                   ),
@@ -181,7 +181,7 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
 
             const SizedBox(height: 20),
             const Text(
-              'You’ll get a reminder before your first charge.',
+              '첫 결제 전에 알림을 받으실 수 있습니다.',
               style: TextStyle(fontSize: 13, color: Colors.grey),
             ),
 
@@ -209,7 +209,7 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
                     ),
                     child: const Center(
                       child: Text(
-                        'Get Started Now',
+                        '지금 시작하기',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

@@ -340,16 +340,219 @@ def register_user(profile: RegisterUserProfile):
         conn.close()
 
 
+@app.get("/user/exists")
+def check_user_exists(x_device_id: str = Header(...)):
+    """Check if user exists with given UUID"""
+    conn = connector.connect(**DB_CONFIG)
+    cursor = conn.cursor()
+
+    try:
+        print(f"🔍 Checking if user exists with UUID: {x_device_id}")
+
+        cursor.execute("SELECT id FROM users WHERE uuid = %s", (x_device_id,))
+        user_row = cursor.fetchone()
+
+        exists = user_row is not None
+        print(f"{'✅' if exists else '❌'} User exists: {exists}")
+
+        return {"exists": exists}
+
+    except Exception as e:
+        print(f"❌ Error checking user existence: {e}")
+        return {"exists": False}
+    finally:
+        cursor.close()
+        conn.close()
+
+
 @app.get("/user")
 def get_user(x_device_id: str = Header(...)):
+    conn = connector.connect(**DB_CONFIG)
+    cursor = conn.cursor()
 
-    # In-memory 사용자 DB (실제로는 DB로 대체)
-    users: Dict[str, Dict] = {}
+    try:
+        print(f"🔍 Fetching user with UUID: {x_device_id}")
 
-    user = users.get(x_device_id)
-    if not user:
-        raise HTTPException(status_code=401, detail="Unauthorized")
-    return user
+        # UUID로 사용자 조회
+        cursor.execute("""
+            SELECT id, uuid, name, age, gender, height, weight, bmi, activity_level, goal,
+                   diabetes, meal_method, average_glucose
+            FROM users
+            WHERE uuid = %s
+        """, (x_device_id,))
+
+        user_row = cursor.fetchone()
+        print(f"📊 User row fetched: {user_row}")
+
+        if not user_row:
+            print(f"❌ User not found for UUID: {x_device_id}")
+            raise HTTPException(status_code=404, detail="User not found")
+
+        user_id = user_row[0]  # Get the actual user ID
+
+        # 사용자 정보 구성
+        user_data = {
+            "uuid": user_row[1],
+            "name": user_row[2],
+            "age": user_row[3],
+            "gender": user_row[4],
+            "height": user_row[5],
+            "weight": user_row[6],
+            "bmi": user_row[7],
+            "activity_level": user_row[8],
+            "goal": user_row[9],
+            "diabetes": user_row[10],
+            "meal_method": user_row[11],
+            "average_glucose": user_row[12],
+            "meals": [],
+            "dietary_restrictions": [],
+            "allergies": []
+        }
+
+        # Get meals - map IDs back to names
+        try:
+            cursor.execute("""
+                SELECT meal_id FROM user_meals
+                WHERE user_id = %s
+            """, (user_id,))
+            meal_ids = cursor.fetchall()
+
+            # Reverse MEAL_MAP to get names from IDs
+            reverse_meal_map = {v: k for k, v in MEAL_MAP.items()}
+            user_data["meals"] = [reverse_meal_map.get(meal_id[0], "Unknown") for meal_id in meal_ids] if meal_ids else []
+            print(f"📊 Meals fetched: {user_data['meals']}")
+        except Exception as e:
+            print(f"⚠️ Error fetching meals: {e}")
+            user_data["meals"] = []
+
+        # Get dietary restrictions - map IDs back to names
+        try:
+            cursor.execute("""
+                SELECT restriction_id FROM user_dietary_restrictions
+                WHERE user_id = %s
+            """, (user_id,))
+            restriction_ids = cursor.fetchall()
+
+            # Reverse RESTRICTION_MAP to get names from IDs
+            reverse_restriction_map = {v: k for k, v in RESTRICTION_MAP.items()}
+            user_data["dietary_restrictions"] = [reverse_restriction_map.get(rest_id[0], "Unknown") for rest_id in restriction_ids] if restriction_ids else ["None"]
+            print(f"📊 Dietary restrictions fetched: {user_data['dietary_restrictions']}")
+        except Exception as e:
+            print(f"⚠️ Error fetching dietary restrictions: {e}")
+            user_data["dietary_restrictions"] = ["None"]
+
+        # Allergies - assuming it's stored as a comma-separated string or JSON
+        # For now, returning empty array as the schema doesn't show allergies table
+        user_data["allergies"] = ["None"]  # Update this if you have an allergies table
+
+        print(f"✅ Returning user data: {user_data}")
+        return user_data
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.put("/user")
+def update_user(updates: dict, x_device_id: str = Header(...)):
+    conn = connector.connect(**DB_CONFIG)
+    cursor = conn.cursor()
+
+    try:
+        # UUID로 사용자 조회
+        cursor.execute("SELECT id FROM users WHERE uuid = %s", (x_device_id,))
+        user_row = cursor.fetchone()
+
+        if not user_row:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        user_id = user_row[0]
+
+        # 업데이트 가능한 필드만 추출
+        allowed_fields = {
+            'name', 'age', 'gender', 'height', 'weight', 'bmi',
+            'activity_level', 'goal', 'diabetes', 'meal_method', 'average_glucose'
+        }
+
+        # 업데이트할 필드 준비
+        update_fields = []
+        update_values = []
+
+        for key, value in updates.items():
+            if key in allowed_fields:
+                update_fields.append(f"{key} = %s")
+                update_values.append(value)
+
+        if not update_fields:
+            return {"message": "No valid fields to update"}
+
+        # weight나 height가 변경되면 BMI 자동 계산
+        if 'weight' in updates or 'height' in updates:
+            # 현재 값 가져오기
+            cursor.execute("SELECT weight, height FROM users WHERE id = %s", (user_id,))
+            current = cursor.fetchone()
+            weight = updates.get('weight', current[0])
+            height = updates.get('height', current[1])
+
+            if weight and height:
+                bmi = weight / ((height / 100) ** 2)
+                if 'bmi' not in updates:
+                    update_fields.append("bmi = %s")
+                    update_values.append(bmi)
+
+        # SQL 실행
+        update_values.append(user_id)
+        sql = f"UPDATE users SET {', '.join(update_fields)} WHERE id = %s"
+        cursor.execute(sql, update_values)
+
+        conn.commit()
+        return {"message": "User profile updated successfully"}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.delete("/user")
+def delete_user(x_device_id: str = Header(...)):
+    conn = connector.connect(**DB_CONFIG)
+    cursor = conn.cursor()
+
+    try:
+        # UUID로 사용자 조회
+        cursor.execute("SELECT id FROM users WHERE uuid = %s", (x_device_id,))
+        user_row = cursor.fetchone()
+
+        if not user_row:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        user_id = user_row[0]
+
+        # 관련 데이터 삭제 (외래 키 제약 조건 때문에 순서 중요)
+        cursor.execute("DELETE FROM user_meals WHERE user_id = %s", (user_id,))
+        cursor.execute("DELETE FROM user_dietary_restrictions WHERE user_id = %s", (user_id,))
+        cursor.execute("DELETE FROM users WHERE id = %s", (user_id,))
+
+        conn.commit()
+        return {"message": "User account deleted successfully"}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        cursor.close()
+        conn.close()
 
 
 # ===================== FatSecret 공통 헬퍼 =====================
@@ -454,7 +657,6 @@ def search_foods(query: str = Query(...)):
     # 2) JSON 파싱 (비-JSON 방어)
     try:
         data = resp.json()
-
     except Exception:
         snippet = resp.text[:300].replace("\n", " ")
         raise HTTPException(status_code=502, detail=f"FatSecret returned non-JSON: {snippet}")

@@ -187,24 +187,24 @@ class _FoodDetailBodyState extends State<_FoodDetailBody> {
     String prettyLabel(String core) {
       switch (core.toLowerCase()) {
         case 'calories':
-          return 'Calories';
+          return '칼로리';
         case 'carbohydrate':
         case 'carb':
         case 'carbs':
-          return 'Carbs';
+          return '탄수화물';
         case 'protein':
-          return 'Protein';
+          return '단백질';
         case 'fat':
-          return 'Fat';
+          return '지방';
         case 'fiber':
-          return 'Fiber';
+          return '식이섬유';
         case 'sugar':
-          return 'Sugar';
+          return '당류';
         case 'sodium':
-          return 'Sodium';
+          return '나트륨';
         case 'saturatedfat':
         case 'saturated_fat':
-          return 'Sat. Fat';
+          return '포화지방';
         default:
           // snake -> Title Case
           final parts = core.split(RegExp(r'[_\s]+'));
@@ -369,6 +369,8 @@ class _Header extends StatelessWidget {
                 : Image.network(
                     imageUrl!,
                     fit: BoxFit.cover,
+                    cacheWidth: 252, // 84 * 3 for 3x pixel density
+                    cacheHeight: 252,
                     headers: const {"User-Agent": "Mozilla/5.0"},
                     loadingBuilder: (context, child, progress) {
                       if (progress == null) return child;
@@ -845,24 +847,24 @@ class _FoodDetailBodyState extends State<_FoodDetailBody> {
     String prettyLabel(String core) {
       switch (core.toLowerCase()) {
         case 'calories':
-          return 'Calories';
+          return '칼로리';
         case 'carbohydrate':
         case 'carb':
         case 'carbs':
-          return 'Carbs';
+          return '탄수화물';
         case 'protein':
-          return 'Protein';
+          return '단백질';
         case 'fat':
-          return 'Fat';
+          return '지방';
         case 'fiber':
-          return 'Fiber';
+          return '식이섬유';
         case 'sugar':
-          return 'Sugar';
+          return '당류';
         case 'sodium':
-          return 'Sodium';
+          return '나트륨';
         case 'saturatedfat':
         case 'saturated_fat':
-          return 'Sat. Fat';
+          return '포화지방';
         default:
           final parts = core.split(RegExp(r'[_\s]+'));
           return parts
@@ -931,61 +933,61 @@ class _FoodDetailBodyState extends State<_FoodDetailBody> {
 
     const mapping = <String, String>{
       // gluten
-      'glutenfree': 'Gluten-free',
-      '무글루텐': 'Gluten-free',
-      '글루텐프리': 'Gluten-free',
+      'glutenfree': '글루텐 프리',
+      '무글루텐': '글루텐 프리',
+      '글루텐프리': '글루텐 프리',
       // dairy
-      'dairyfree': 'Dairy-free',
-      '무유제품': 'Dairy-free',
-      '유제품무첨가': 'Dairy-free',
-      '락토프리': 'Lactose-free',
-      '무유당': 'Lactose-free',
-      'lactosefree': 'Lactose-free',
+      'dairyfree': '유제품 프리',
+      '무유제품': '유제품 프리',
+      '유제품무첨가': '유제품 프리',
+      '락토프리': '유당 프리',
+      '무유당': '유당 프리',
+      'lactosefree': '유당 프리',
       // vegan/vegetarian
-      'vegan': 'Vegan',
-      '비건': 'Vegan',
-      'vegetarian': 'Vegetarian',
-      '채식': 'Vegetarian',
+      'vegan': '비건',
+      '비건': '비건',
+      'vegetarian': '채식',
+      '채식': '채식',
       // keto/paleo/whole30
-      'keto': 'Keto',
-      '키토': 'Keto',
-      'paleo': 'Paleo',
-      '팔레오': 'Paleo',
+      'keto': '키토',
+      '키토': '키토',
+      'paleo': '팔레오',
+      '팔레오': '팔레오',
       'whole30': 'Whole30',
       // protein/carbs/fat/sugar/sodium/fiber/calorie
-      '고단백': 'High-protein',
-      'highprotein': 'High-protein',
-      '저탄수': 'Low-carb',
-      '저탄수화물': 'Low-carb',
-      'lowcarb': 'Low-carb',
-      '저지방': 'Low-fat',
-      'lowfat': 'Low-fat',
-      '저당': 'Low-sugar',
-      'lowsugar': 'Low-sugar',
-      '저나트륨': 'Low-sodium',
-      'lowsodium': 'Low-sodium',
-      '고섬유': 'High-fiber',
-      'highfiber': 'High-fiber',
-      '저칼로리': 'Low-calorie',
-      'lowcalorie': 'Low-calorie',
+      '고단백': '고단백',
+      'highprotein': '고단백',
+      '저탄수': '저탄수화물',
+      '저탄수화물': '저탄수화물',
+      'lowcarb': '저탄수화물',
+      '저지방': '저지방',
+      'lowfat': '저지방',
+      '저당': '저당',
+      'lowsugar': '저당',
+      '저나트륨': '저나트륨',
+      'lowsodium': '저나트륨',
+      '고섬유': '고섬유',
+      'highfiber': '고섬유',
+      '저칼로리': '저칼로리',
+      'lowcalorie': '저칼로리',
       // religious
-      'halal': 'Halal',
-      '할랄': 'Halal',
-      'kosher': 'Kosher',
-      '코셔': 'Kosher',
+      'halal': '할랄',
+      '할랄': '할랄',
+      'kosher': '코셔',
+      '코셔': '코셔',
       // allergens
-      'nutfree': 'Nut-free',
-      '견과류없음': 'Nut-free',
-      'peanutfree': 'Peanut-free',
-      '땅콩없음': 'Peanut-free',
-      'eggfree': 'Egg-free',
-      '계란없음': 'Egg-free',
-      'shellfishfree': 'Shellfish-free',
-      '갑각류없음': 'Shellfish-free',
-      'seaffodfree': 'Seafood-free',
-      '해산물없음': 'Seafood-free',
-      'nopork': 'No pork',
-      '돼지고기없음': 'No pork',
+      'nutfree': '견과류 프리',
+      '견과류없음': '견과류 프리',
+      'peanutfree': '땅콩 프리',
+      '땅콩없음': '땅콩 프리',
+      'eggfree': '계란 프리',
+      '계란없음': '계란 프리',
+      'shellfishfree': '갑각류 프리',
+      '갑각류없음': '갑각류 프리',
+      'seaffodfree': '해산물 프리',
+      '해산물없음': '해산물 프리',
+      'nopork': '돼지고기 제외',
+      '돼지고기없음': '돼지고기 제외',
     };
 
     for (final r in raw) {
@@ -1033,13 +1035,13 @@ class _FoodDetailBodyState extends State<_FoodDetailBody> {
     final sodium = _num(['sodium_mg', 'sodium']);
 
     // 매우 보편적인 컷오프 (일반 1회 제공량 기준)
-    if (cal != null && cal <= 300) result.add('Low-calorie');
-    if (carb != null && carb <= 20) result.add('Low-carb');
-    if (protein != null && protein >= 20) result.add('High-protein');
-    if (fat != null && fat <= 10) result.add('Low-fat');
-    if (sugar != null && sugar <= 5) result.add('Low-sugar');
-    if (fiber != null && fiber >= 5) result.add('High-fiber');
-    if (sodium != null && sodium <= 140) result.add('Low-sodium');
+    if (cal != null && cal <= 300) result.add('저칼로리');
+    if (carb != null && carb <= 20) result.add('저탄수화물');
+    if (protein != null && protein >= 20) result.add('고단백');
+    if (fat != null && fat <= 10) result.add('저지방');
+    if (sugar != null && sugar <= 5) result.add('저당');
+    if (fiber != null && fiber >= 5) result.add('고섬유');
+    if (sodium != null && sodium <= 140) result.add('저나트륨');
 
     // 재료 키워드로 추가 시사점 (확정 불가이므로 보수적으로)
     final ingText = ingredients.join(' ').toLowerCase();
@@ -1156,6 +1158,8 @@ class _Header extends StatelessWidget {
                 : Image.network(
                     imageUrl!,
                     fit: BoxFit.cover,
+                    cacheWidth: 252, // 84 * 3 for 3x pixel density
+                    cacheHeight: 252,
                     headers: const {"User-Agent": "Mozilla/5.0"},
                     loadingBuilder: (context, child, progress) {
                       if (progress == null) return child;

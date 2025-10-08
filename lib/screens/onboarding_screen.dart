@@ -159,7 +159,7 @@ class OnboardingScreen extends StatelessWidget {
                           Rect.fromLTWH(0, 0, bounds.width, bounds.height),
                         ),
                     child: const Text(
-                      'Welcome to GlucoUS!',
+                      'GlucoUS에 오신 것을\n환영합니다!',
                       style: TextStyle(
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
@@ -169,10 +169,7 @@ class OnboardingScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   const Text(
-                    "No more worries about your meals.\n"
-                    "Personalized diets and blood glucose predictions,\n"
-                    "all in one place for diabetes care.\n"
-                    "Start your healthy eating journey with GlucoUS today.",
+                    '당신의 식사가 더 이상 고민이 되지 않도록,\n당뇨를 위한 맞춤 식단과 혈당 예측을 한 곳에서.\nGlucoUS와 함께 건강한 식생활을 시작해보세요.',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
@@ -209,7 +206,7 @@ class OnboardingScreen extends StatelessWidget {
                         ),
                         child: const Center(
                           child: Text(
-                            'Get Started',
+                            '시작하기',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,

@@ -89,7 +89,7 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                   SizedBox(height: MediaQuery.of(context).size.height * 0.08),
                   const Center(
                     child: Text(
-                      'How do you live your daily life?',
+                      '일상생활은 어떻게 보내시나요?',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -97,7 +97,7 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                     ),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  const Text("Select your activity level"),
+                  const Text("활동 수준을 선택하세요"),
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
@@ -105,10 +105,10 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                     children: activityOptions.map((option) {
                       final selected = activityLevel == option;
                       final label = option == 'low'
-                          ? 'Mostly sedentary'
+                          ? '주로 앉아서 생활'
                           : option == 'medium'
-                          ? 'Exercise at least once a week'
-                          : 'Exercise 3+ times a week';
+                          ? '주 1회 이상 운동'
+                          : '주 3회 이상 운동';
                       return ChoiceChip(
                         label: Text(label),
                         selected: selected,
@@ -127,7 +127,7 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                     }).toList(),
                   ),
                   const SizedBox(height: 24),
-                  const Text("Select your diabetes type"),
+                  const Text("당뇨 유형을 선택하세요"),
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
@@ -137,13 +137,13 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                       String displayLabel;
                       switch (option) {
                         case 'T1D':
-                          displayLabel = 'Type 1 Diabetes';
+                          displayLabel = '1형 당뇨';
                           break;
                         case 'T2D':
-                          displayLabel = 'Type 2 Diabetes';
+                          displayLabel = '2형 당뇨';
                           break;
                         case 'none':
-                          displayLabel = 'None';
+                          displayLabel = '없음';
                           break;
                         default:
                           displayLabel = option;
@@ -170,7 +170,7 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                     }).toList(),
                   ),
                   const SizedBox(height: 24),
-                  const Text("Select your goal"),
+                  const Text("목표를 선택하세요"),
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
@@ -178,10 +178,10 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                     children: goalOptions.map((option) {
                       final selected = goal == option;
                       final label = option == 'blood_sugar_control'
-                          ? 'Blood sugar control'
+                          ? '혈당 조절'
                           : option == 'weight_loss'
-                          ? 'Weight management'
-                          : 'Balanced diet';
+                          ? '체중 관리'
+                          : '균형 잡힌 식단';
                       return ChoiceChip(
                         label: Text(label),
                         selected: selected,
@@ -246,7 +246,7 @@ class _UserLifestyleScreenState extends State<UserLifestyleScreen> {
                     ),
                     child: const Center(
                       child: Text(
-                        'Next',
+                        '다음',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,

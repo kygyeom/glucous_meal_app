@@ -257,4 +257,116 @@ class ApiService {
       print("❌ 사용자 인증 실패: ${response.body}");
     }
   }
+
+  // 유저 존재 여부 확인
+  static Future<bool> checkUserExists() async {
+    try {
+      final uuid = await UUIDService.getOrCreateUUID();
+      print("🔍 Checking if user exists with UUID: $uuid");
+
+      final response = await _client.get(
+        Uri.parse('$baseUrl/user/exists'),
+        headers: {'X-Device-ID': uuid},
+      );
+
+      print("📡 User exists check response: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final exists = data['exists'] == true;
+        print("✅ User exists: $exists");
+        return exists;
+      } else {
+        print("⚠️ Failed to check user existence: ${response.statusCode}");
+        return false;
+      }
+    } catch (e) {
+      print("❌ Error checking user existence: $e");
+      return false;
+    }
+  }
+
+  // 유저 프로필 가져오기
+  static Future<UserProfile?> fetchUserProfile() async {
+    try {
+      final uuid = await UUIDService.getOrCreateUUID();
+      print("🔑 Fetching profile with UUID: $uuid");
+
+      final response = await _client.get(
+        Uri.parse('$baseUrl/user'),
+        headers: {'X-Device-ID': uuid},
+      );
+
+      print("📡 Response status: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        final String responseBody = utf8.decode(response.bodyBytes);
+        print("📦 Raw response: $responseBody");
+
+        final Map<String, dynamic> data = json.decode(responseBody);
+        print("📋 Parsed data: $data");
+
+        final profile = UserProfile.fromJson(data);
+        print("✅ Profile created: name=${profile.name}, age=${profile.age}, height=${profile.height}");
+
+        return profile;
+      } else {
+        print("❌ Failed to fetch user profile: ${response.statusCode}");
+        print("❌ Response body: ${response.body}");
+        return null;
+      }
+    } catch (e, stackTrace) {
+      print("❌ Error fetching user profile: $e");
+      print("❌ Stack trace: $stackTrace");
+      return null;
+    }
+  }
+
+  // 유저 계정 삭제
+  static Future<bool> deleteUserAccount(String uuid) async {
+    try {
+      final response = await _client.delete(
+        Uri.parse('$baseUrl/user'),
+        headers: {'X-Device-ID': uuid},
+      );
+
+      if (response.statusCode == 200) {
+        print("✅ User account deleted successfully");
+        return true;
+      } else {
+        print("❌ Failed to delete user account: ${response.statusCode}");
+        return false;
+      }
+    } catch (e) {
+      print("❌ Error deleting user account: $e");
+      return false;
+    }
+  }
+
+  // 유저 프로필 업데이트
+  static Future<bool> updateUserProfile(Map<String, dynamic> updates) async {
+    try {
+      final uuid = await UUIDService.getOrCreateUUID();
+
+      final response = await _client.put(
+        Uri.parse('$baseUrl/user'),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Device-ID': uuid,
+        },
+        body: jsonEncode(updates),
+      );
+
+      if (response.statusCode == 200) {
+        print("✅ User profile updated successfully");
+        return true;
+      } else {
+        print("❌ Failed to update user profile: ${response.statusCode}");
+        return false;
+      }
+    } catch (e) {
+      print("❌ Error updating user profile: $e");
+      return false;
+    }
+  }
 }

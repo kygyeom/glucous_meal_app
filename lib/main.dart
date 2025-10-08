@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
-import 'screens/onboarding_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
+  // Initialize Flutter bindings
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Configure image cache to prevent buffer overflow on Android
+  PaintingBinding.instance.imageCache.maximumSizeBytes = 100 << 20; // 100 MB
+  PaintingBinding.instance.imageCache.maximumSize = 100; // 100 images
+
   runApp(const GlucoUSApp());
 }
 
@@ -23,7 +30,7 @@ class GlucoUSApp extends StatelessWidget {
           foregroundColor: Colors.black,
         ),
       ),
-      home: OnboardingScreen(),
+      home: const SplashScreen(),
     );
   }
 }

@@ -96,11 +96,11 @@ class _UserMealInfoScreenState extends State<UserMealInfoScreen> {
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   const Text(
-                    'How do you usually eat?',
+                    '평소 어떻게 식사하시나요?',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  const Text('When do you usually eat?'),
+                  const Text('주로 언제 식사하시나요?'),
                   const SizedBox(height: 12),
                   GridView.count(
                     crossAxisCount: 2,
@@ -110,14 +110,14 @@ class _UserMealInfoScreenState extends State<UserMealInfoScreen> {
                     crossAxisSpacing: 8,
                     childAspectRatio: 3,
                     children: [
-                      buildChip('Breakfast', '🍳', label: 'Breakfast'),
-                      buildChip('Lunch', '🥗', label: 'Lunch'),
-                      buildChip('Dinner', '🍽️', label: 'Dinner'),
-                      buildChip('Snack', '🍪', label: 'Snack'),
+                      buildChip('Breakfast', '🍳', label: '아침'),
+                      buildChip('Lunch', '🥗', label: '점심'),
+                      buildChip('Dinner', '🍽️', label: '저녁'),
+                      buildChip('Snack', '🍪', label: '간식'),
                     ],
                   ),
                   const SizedBox(height: 24),
-                  const Text('How do you usually eat?'),
+                  const Text('주로 어떻게 식사하시나요?'),
                   const SizedBox(height: 4),
                   Wrap(
                     children: ['Direct cooking', 'Eating out', 'Delivery based']
@@ -125,7 +125,7 @@ class _UserMealInfoScreenState extends State<UserMealInfoScreen> {
                           (method) => buildChip(
                             method,
                             null,
-                            label: method,
+                            label: method == 'Direct cooking' ? '직접 조리' : method == 'Eating out' ? '외식' : '배달',
                             isMethod: true,
                           ),
                         )
@@ -179,7 +179,7 @@ class _UserMealInfoScreenState extends State<UserMealInfoScreen> {
                     ),
                     child: const Center(
                       child: Text(
-                        'Next',
+                        '다음',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,

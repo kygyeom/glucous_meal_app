@@ -64,13 +64,13 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
   List<String> selectedAllergies = ['None'];
 
   final Map<String, String> allergyLabels = {
-    'None': 'None',
-    'Dairy': 'Dairy',
-    'Nuts': 'Nuts',
-    'Shellfish': 'Shellfish',
-    'Meat': 'Meat',
-    'Seafood': 'Seafood',
-    'Other': 'Other',
+    'None': '없음',
+    'Dairy': '유제품',
+    'Nuts': '견과류',
+    'Shellfish': '갑각류',
+    'Meat': '육류',
+    'Seafood': '해산물',
+    'Other': '기타',
   };
 
   void toggleSelection(
@@ -220,14 +220,14 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                       children: [
                         const SizedBox(height: 16),
                         const Text(
-                          'Do you have any dietary restrictions?',
+                          '식이 제한 사항이 있으신가요?',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 24),
-                        const Text('Dietary restrictions'),
+                        const Text('식이 제한'),
                         const SizedBox(height: 12),
                         GridView.count(
                           shrinkWrap: true,
@@ -238,7 +238,7 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           children: [
                             buildChip(
-                              'Vegetarian',
+                              '채식',
                               selectedRestrictions.contains('Vegetarian'),
                               () {
                                 toggleSelection(
@@ -250,7 +250,7 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                               emoji: '🥕',
                             ),
                             buildChip(
-                              'Halal',
+                              '할랄',
                               selectedRestrictions.contains('Halal'),
                               () {
                                 toggleSelection(
@@ -262,7 +262,7 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                               emoji: '🐓',
                             ),
                             buildChip(
-                              'Gluten-free',
+                              '글루텐 프리',
                               selectedRestrictions.contains('Gluten-free'),
                               () {
                                 toggleSelection(
@@ -274,7 +274,7 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                               emoji: '🌾',
                             ),
                             buildChip(
-                              'None',
+                              '없음',
                               selectedRestrictions.contains('None'),
                               () {
                                 toggleSelection(
@@ -288,7 +288,7 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                           ],
                         ),
                         const SizedBox(height: 24),
-                        const Text('Food allergies'),
+                        const Text('식품 알레르기'),
                         const SizedBox(height: 8),
                         Wrap(
                           spacing: 8,
@@ -307,18 +307,18 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                         ),
                         const SizedBox(height: 12),
                         const Text(
-                          'Please select any food allergies you have.\nAlso include Halal, vegetarian, or food preferences.',
+                          '식품 알레르기가 있으시면 선택하세요.\n할랄, 채식 또는 식품 선호도도 포함해주세요.',
                           style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                         const SizedBox(height: 16),
-                        const Text('Enter your recent average blood glucose'),
+                        const Text('최근 평균 혈당을 입력하세요'),
                         const SizedBox(height: 8),
                         TextFormField(
                           controller: averageGlucoseController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                            labelText: 'Average glucose (mg/dL)',
-                            hintText: 'e.g., 100',
+                            labelText: '평균 혈당 (mg/dL)',
+                            hintText: '예: 100',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -326,11 +326,11 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your average glucose value';
+                              return '평균 혈당 값을 입력하세요';
                             }
                             final parsed = double.tryParse(value);
                             if (parsed == null || parsed <= 0) {
-                              return 'Please enter a valid number';
+                              return '유효한 숫자를 입력하세요';
                             }
                             return null;
                           },
@@ -341,7 +341,7 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                           onChanged: (val) =>
                               setState(() => agreedToTerms = val ?? false),
                           title: const Text(
-                            'I agree to the use of my personal data.',
+                            '개인 정보 사용에 동의합니다.',
                           ),
                           controlAffinity: ListTileControlAffinity.leading,
                         ),
@@ -435,7 +435,7 @@ class _UserMealConditionScreenState extends State<UserMealConditionScreen> {
                         child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 12),
                           child: Text(
-                            'Next',
+                            '다음',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,

@@ -73,7 +73,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     SizedBox(height: MediaQuery.of(context).size.height * 0.08),
                     const Center(
                       child: Text(
-                        'Tell us about yourself',
+                        '당신에 대해 알려주세요',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -81,30 +81,30 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    const Text("Nickname"),
+                    const Text("닉네임"),
                     TextFormField(
                       keyboardType: TextInputType.text,
                       onChanged: (val) => name = val,
                       validator: (val) => val == null || val.isEmpty
-                          ? 'Please enter your nickname'
+                          ? '닉네임을 입력하세요'
                           : null,
                     ),
                     const SizedBox(height: 24),
-                    const Text("Age"),
+                    const Text("나이"),
                     TextFormField(
                       keyboardType: TextInputType.number,
                       onChanged: (val) => age = int.tryParse(val),
                       validator: (val) => val == null || val.isEmpty
-                          ? 'Please enter your age'
+                          ? '나이를 입력하세요'
                           : null,
                     ),
                     const SizedBox(height: 4),
                     const Text(
-                      "Enter your age in years.",
+                      "나이를 연 단위로 입력하세요.",
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     const SizedBox(height: 24),
-                    const Text("Gender"),
+                    const Text("성별"),
                     const SizedBox(height: 8),
                     Row(
                       children: ['male', 'female'].map((option) {
@@ -128,7 +128,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               ),
                               child: Center(
                                 child: Text(
-                                  option == 'male' ? 'Male' : 'Female',
+                                  option == 'male' ? '남성' : '여성',
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
@@ -141,21 +141,21 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       }).toList(),
                     ),
                     const SizedBox(height: 24),
-                    const Text("Height (cm)"),
+                    const Text("키 (cm)"),
                     TextFormField(
                       keyboardType: TextInputType.number,
                       onChanged: (val) => height = double.tryParse(val),
                       validator: (val) => val == null || val.isEmpty
-                          ? 'Please enter your height'
+                          ? '키를 입력하세요'
                           : null,
                     ),
                     const SizedBox(height: 24),
-                    const Text("Weight (kg)"),
+                    const Text("체중 (kg)"),
                     TextFormField(
                       keyboardType: TextInputType.number,
                       onChanged: (val) => weight = double.tryParse(val),
                       validator: (val) => val == null || val.isEmpty
-                          ? 'Please enter your weight'
+                          ? '체중을 입력하세요'
                           : null,
                     ),
                     const SizedBox(height: 16),
@@ -207,7 +207,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                     child: const Center(
                       child: Text(
-                        'Next',
+                        '다음',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,

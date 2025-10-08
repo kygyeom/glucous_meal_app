@@ -157,7 +157,7 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
               ),
               const SizedBox(height: 4),
               const Text(
-                "You're not alone in this anymore :)",
+                "이제 혼자가 아니에요 :)",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
@@ -165,7 +165,7 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Text(
-                  '- ${widget.username} -',
+                  '- 홍길동 -',
                   style: const TextStyle(fontSize: 13, color: Colors.grey),
                 ),
               ),
@@ -200,7 +200,7 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Want to know more about your meals?",
+                "식사에 대해 더 알고 싶으신가요?",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 12),
@@ -223,7 +223,7 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
                         onChanged: _onQueryChanged,
                         textInputAction: TextInputAction.search,
                         decoration: const InputDecoration(
-                          hintText: "Search for any food you're interested in",
+                          hintText: "관심 있는 음식을 검색해보세요",
                           border: InputBorder.none,
                         ),
                       ),
@@ -361,6 +361,7 @@ import 'package:glucous_meal_app/screens/food_detail_screen.dart';
 
 // ✅ 새 프로필 '내용 위젯'
 import 'package:glucous_meal_app/screens/user_profile_details_screen.dart';
+import 'package:glucous_meal_app/models/models.dart';
 
 /// 서버 베이스 주소 (필요 시 변경)
 /// flutter run --dart-define=API_BASE_URL=http://127.0.0.1:8000
@@ -390,8 +391,12 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
   // 같은 프레임에서 상세 표시
   FoodHit? _selectedHit;
 
-  // ✅ 프로필 모드 플래그 (검색 상세와 동일 ‘틀’ 사용)
+  // ✅ 프로필 모드 플래그 (검색 상세와 동일 '틀' 사용)
   bool _showProfile = false;
+
+  // ✅ 실제 유저 프로필 데이터
+  UserProfile? _userProfile;
+  bool _loadingProfile = false;
 
   @override
   void initState() {
@@ -400,6 +405,43 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
     _controller.addListener(() {
       if (mounted) setState(() {}); // clear(X) 버튼 토글
     });
+    _loadUserProfile(); // 앱 시작 시 유저 프로필 로드
+  }
+
+  // 유저 프로필 로드
+  Future<void> _loadUserProfile() async {
+    if (_loadingProfile) return;
+
+    print("🔄 Starting to load user profile...");
+    setState(() => _loadingProfile = true);
+
+    try {
+      final profile = await ApiService.fetchUserProfile();
+      print("📥 Received profile: $profile");
+
+      if (mounted) {
+        setState(() {
+          _userProfile = profile;
+          _loadingProfile = false;
+        });
+
+        if (profile != null) {
+          print("✅ Profile loaded successfully: name=${profile.name}, age=${profile.age}");
+        } else {
+          print("⚠️ Profile is null");
+        }
+      }
+    } catch (e, stackTrace) {
+      print("❌ Error in _loadUserProfile: $e");
+      print("❌ Stack trace: $stackTrace");
+
+      if (mounted) {
+        setState(() => _loadingProfile = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load user profile: $e')),
+        );
+      }
+    }
   }
 
   @override
@@ -522,7 +564,7 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
               ),
               const SizedBox(height: 4),
               const Text(
-                "You're not alone in this anymore :)",
+                "이제 혼자가 아니에요 :)",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
@@ -530,7 +572,7 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Text(
-                  '- ${widget.username} -',
+                  '- 홍길동 -',
                   style: const TextStyle(fontSize: 13, color: Colors.grey),
                 ),
               ),
@@ -567,7 +609,7 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Want to know more about your meals?",
+                "식사에 대해 더 알고 싶으신가요?",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 12),
@@ -590,7 +632,7 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
                         onChanged: _onQueryChanged,
                         textInputAction: TextInputAction.search,
                         decoration: const InputDecoration(
-                          hintText: "Search for any food you're interested in",
+                          hintText: "관심 있는 음식을 검색해보세요",
                           border: InputBorder.none,
                         ),
                       ),
@@ -723,12 +765,12 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 820),
-        child: UserProfileDetail(
-          name: widget.username, // 로그인 이름 등 사용
-          age: 25,
-          heightCm: 176.1,
-          gender: 'Male',
-        ),
+        child: _loadingProfile
+            ? const Center(child: CircularProgressIndicator())
+            : UserProfileDetail(
+                userProfile: _userProfile,
+                onProfileUpdated: _loadUserProfile,
+              ),
       ),
     );
   }
