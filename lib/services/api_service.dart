@@ -369,4 +369,54 @@ class ApiService {
       return false;
     }
   }
+
+  // 혈당 예측
+  static Future<Map<String, double>?> predictGlucose({
+    required double carbohydrateG,
+    required double caloriesKcal,
+    required double proteinG,
+    required double fatG,
+  }) async {
+    try {
+      final uuid = await UUIDService.getOrCreateUUID();
+      print("🔑 Using UUID for prediction: $uuid");
+
+      final response = await _client.post(
+        Uri.parse('$baseUrl/predict'),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Device-ID': uuid,
+        },
+        body: jsonEncode({
+          'carbohydrate_g': carbohydrateG,
+          'calories_kcal': caloriesKcal,
+          'protein_g': proteinG,
+          'fat_g': fatG,
+        }),
+      );
+
+      print("📡 Prediction response status: ${response.statusCode}");
+      print("📦 Prediction response body: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print("✅ Glucose prediction successful: $data");
+        return {
+          'max_glucose': (data['max_glucose'] as num).toDouble(),
+          'delta_glucose': (data['delta_glucose'] as num).toDouble(),
+          'average_glucose': (data['average_glucose'] as num).toDouble(),
+        };
+      } else if (response.statusCode == 404) {
+        print("❌ User not found - need to register first");
+        throw Exception('사용자 등록이 필요합니다. 앱을 재시작하고 프로필을 설정해주세요.');
+      } else {
+        final errorBody = response.body;
+        print("❌ Failed to predict glucose: ${response.statusCode} - $errorBody");
+        throw Exception('혈당 예측 실패: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("❌ Error predicting glucose: $e");
+      rethrow;
+    }
+  }
 }

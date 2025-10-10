@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:glucous_meal_app/models/models.dart';
 import 'package:glucous_meal_app/services/api_service.dart';
 import 'glucous_loading_screen.dart';
@@ -67,7 +66,7 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
     super.dispose();
   }
 
-  void submit() {
+  void submit() async {
     // 1. Show loading overlay
     showDialog(
       context: context,
@@ -94,9 +93,24 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
       averageGlucose: widget.averageGlucose ?? 0.0,
     );
 
-    ApiService.registerUser(userProfile);
-    startSubscription();
-    loadRecommendation(userProfile);
+    try {
+      // 2. Register user and WAIT for it to complete
+      await ApiService.registerUser(userProfile);
+
+      // 3. Start subscription
+      startSubscription();
+
+      // 4. Load recommendations and navigate
+      await loadRecommendation(userProfile);
+    } catch (e) {
+      // Remove loading and show error
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('등록 실패: $e')),
+        );
+      }
+    }
   }
 
   void startSubscription() {
@@ -109,27 +123,29 @@ class _SubscriptionOfferScreen extends State<SubscriptionOfferScreen> {
     // debugPrint("Purchase started: $productId");
   }
 
-  void loadRecommendation(UserProfile userProfile) async {
-    final double bmi = widget.weight / pow(widget.height / 100, 2);
-
+  Future<void> loadRecommendation(UserProfile userProfile) async {
     try {
-      // 2. API call
-      final recommendations = await ApiService.fetchRecommendations(
+      // 2. API call - fetch recommendations but don't need to use them yet
+      await ApiService.fetchRecommendations(
         userProfile,
       );
 
       // 3. Remove loading
-      Navigator.of(context).pop();
+      if (mounted) Navigator.of(context).pop();
 
       // 4. Navigate to results page
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => Main(username: widget.name)),
-      );
+      if (mounted) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => Main(username: widget.name)),
+        );
+      }
     } catch (e) {
-      Navigator.of(context).pop(); // remove loading
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('추천 실패: $e')));
+      if (mounted) {
+        Navigator.of(context).pop(); // remove loading
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('추천 실패: $e')));
+      }
     }
   }
 

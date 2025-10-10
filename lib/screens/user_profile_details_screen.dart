@@ -94,12 +94,12 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
 
   String _formatDiabetes(String? diabetes) {
     if (diabetes == null || diabetes.isEmpty) return '설정 안됨';
-    switch (diabetes.toLowerCase()) {
-      case 'none':
+    switch (diabetes.toUpperCase()) {
+      case 'NONE':
         return '당뇨 없음';
-      case 'type1':
+      case 'T1D':
         return '1형 당뇨';
-      case 'type2':
+      case 'T2D':
         return '2형 당뇨';
       default:
         return diabetes;
@@ -108,8 +108,97 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
 
   String _formatMealMethod(String? method) {
     if (method == null || method.isEmpty) return '설정 안됨';
-    // Already formatted correctly in database
-    return method;
+    switch (method.toLowerCase()) {
+      case 'direct cooking':
+      case 'home_cooked':
+        return '직접 조리';
+      case 'delivery':
+      case 'delivery based':
+        return '배달';
+      case 'eating_out':
+      case 'eating out':
+        return '외식';
+      case 'meal_kit':
+        return '밀키트';
+      default:
+        return method;
+    }
+  }
+
+  String _formatMeals(List<String>? meals) {
+    if (meals == null || meals.isEmpty) return '설정 안됨';
+    return meals.map((meal) {
+      switch (meal.toLowerCase()) {
+        case 'breakfast':
+          return '아침';
+        case 'lunch':
+          return '점심';
+        case 'dinner':
+          return '저녁';
+        case 'snack':
+          return '간식';
+        default:
+          return meal;
+      }
+    }).join(', ');
+  }
+
+  String _formatDietaryRestrictions(List<String>? restrictions) {
+    if (restrictions == null || restrictions.isEmpty) return '없음';
+    if (restrictions.length == 1 && restrictions[0].toLowerCase() == 'none') return '없음';
+    return restrictions.where((r) => r.toLowerCase() != 'none').map((restriction) {
+      switch (restriction.toLowerCase()) {
+        case 'vegetarian':
+          return '채식';
+        case 'vegan':
+          return '비건';
+        case 'halal':
+          return '할랄';
+        case 'low_sodium':
+          return '저염식';
+        case 'low_carb':
+          return '저탄수화물';
+        case 'gluten-free':
+        case 'gluten_free':
+          return '글루텐 프리';
+        default:
+          return restriction;
+      }
+    }).join(', ');
+  }
+
+  String _formatAllergies(List<String>? allergies) {
+    if (allergies == null || allergies.isEmpty) return '없음';
+    if (allergies.length == 1 && allergies[0].toLowerCase() == 'none') return '없음';
+    return allergies.where((a) => a.toLowerCase() != 'none').map((allergy) {
+      switch (allergy.toLowerCase()) {
+        case 'dairy':
+        case 'milk':
+          return '유제품';
+        case 'eggs':
+          return '계란';
+        case 'peanuts':
+          return '땅콩';
+        case 'nuts':
+        case 'tree_nuts':
+          return '견과류';
+        case 'soy':
+          return '콩';
+        case 'wheat':
+          return '밀';
+        case 'fish':
+        case 'seafood':
+          return '해산물';
+        case 'shellfish':
+          return '갑각류';
+        case 'meat':
+          return '육류';
+        case 'other':
+          return '기타';
+        default:
+          return allergy;
+      }
+    }).join(', ');
   }
 
   Future<void> _updateProfile(Map<String, dynamic> updates) async {
@@ -287,13 +376,13 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
   Future<void> _editDiabetes() async {
     final displayToDB = {
       '당뇨 없음': 'none',
-      '1형 당뇨': 'type1',
-      '2형 당뇨': 'type2',
+      '1형 당뇨': 'T1D',
+      '2형 당뇨': 'T2D',
     };
     final dbToDisplay = {
       'none': '당뇨 없음',
-      'type1': '1형 당뇨',
-      'type2': '2형 당뇨',
+      'T1D': '1형 당뇨',
+      'T2D': '2형 당뇨',
     };
 
     final currentDisplay = dbToDisplay[_currentProfile?.diabetes] ?? '당뇨 없음';
@@ -480,10 +569,10 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
           child: Text('식단 선호도', style: t.titleMedium?.copyWith(color: c.primary)),
         ),
         const SizedBox(height: 8),
-        _fieldTile(context, '식사', _currentProfile?.meals.join(', ') ?? '설정 안됨'),
+        _fieldTile(context, '식사', _formatMeals(_currentProfile?.meals)),
         _fieldTile(context, '식사 방법', _formatMealMethod(_currentProfile?.mealMethod)),
-        _fieldTile(context, '식이 제한', _currentProfile?.dietaryRestrictions.join(', ') ?? '없음'),
-        _fieldTile(context, '알레르기', _currentProfile?.allergies.join(', ') ?? '없음'),
+        _fieldTile(context, '식이 제한', _formatDietaryRestrictions(_currentProfile?.dietaryRestrictions)),
+        _fieldTile(context, '알레르기', _formatAllergies(_currentProfile?.allergies)),
 
         const SizedBox(height: 12),
         Padding(

@@ -72,6 +72,17 @@ class Recommendation(BaseModel):
     expected_delta_g: float
     nutrition: dict
 
+class PredictGlucoseRequest(BaseModel):
+    carbohydrate_g: float
+    calories_kcal: float
+    protein_g: float
+    fat_g: float
+
+class PredictGlucoseResponse(BaseModel):
+    max_glucose: float
+    delta_glucose: float
+    average_glucose: float
+
 
 load_dotenv()
 DB_CONFIG = {
@@ -274,6 +285,83 @@ def recommend_meals(user: UserProfile):
 
         conn.close()
         cursor.close()
+
+
+# Predict Glucose
+
+@app.post("/predict", response_model=PredictGlucoseResponse)
+def predict_glucose(
+    nutrition: PredictGlucoseRequest,
+    x_device_id: str = Header(...)
+):
+    """
+    Predict max glucose and delta glucose based on nutrition input.
+    Requires user to be logged in (X-Device-ID header).
+    """
+    try:
+        conn = connector.connect(**DB_CONFIG)
+        cursor = conn.cursor()
+
+        # Get user profile
+        cursor.execute("""
+            SELECT age, gender, height, weight, bmi, average_glucose
+            FROM users
+            WHERE uuid = %s
+        """, (x_device_id,))
+
+        user_row = cursor.fetchone()
+
+        if not user_row:
+            raise HTTPException(status_code=404, detail="User not found. Please register first.")
+
+        # Create DataFrame with nutrition data
+        nutrition_df = pd.DataFrame([{
+            'carbohydrate_g': nutrition.carbohydrate_g,
+            'calories_kcal': nutrition.calories_kcal,
+            'protein_g': nutrition.protein_g,
+            'fat_g': nutrition.fat_g
+        }])
+
+        # Prepare user data
+        age, gender, height, weight, bmi, average_glucose = user_row
+        user_features = {
+            'g0': average_glucose,
+            'Age': age,
+            'BMI': bmi,
+            'Body weight ': weight,
+            'Height ': height,
+            'Gender_F': 1.0 if gender.lower() == 'female' else 0.0,
+            'Gender_M': 1.0 if gender.lower() == 'male' else 0.0,
+        }
+
+        # Add user features to nutrition data
+        for feature_name in GLUCOSE_MODEL_USER_FEATURES:
+            nutrition_df[feature_name] = user_features[feature_name]
+
+        # Load models and predict
+        max_glucose_model = load_model(MAX_GLUCOSE_MODEL_PATH)
+        delta_glucose_model = load_model(DELTA_GLUCOSE_MODEL_PATH)
+
+        x_input = nutrition_df.to_numpy()
+
+        max_glucose_pred = max_glucose_model.predict(x_input)[0]
+        delta_glucose_pred = delta_glucose_model.predict(x_input)[0]
+
+        return PredictGlucoseResponse(
+            max_glucose=float(max_glucose_pred),
+            delta_glucose=float(delta_glucose_pred),
+            average_glucose=float(average_glucose)
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error in glucose prediction: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        if 'conn' in locals():
+            cursor.close()
+            conn.close()
 
 
 # Register User

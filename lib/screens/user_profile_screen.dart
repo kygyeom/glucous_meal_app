@@ -14,7 +14,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   double? height;
   double? weight;
   String gender = 'male';
-  String name = 'empty';
+  String name = '';
 
   Widget buildProgressBar() {
     return Padding(

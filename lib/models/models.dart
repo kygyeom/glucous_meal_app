@@ -111,15 +111,15 @@ class Recommendation {
 
   factory Recommendation.fromJson(Map<String, dynamic> json) {
     return Recommendation(
-      foodName: json['food_name'],
-      foodGroup: json['food_group'],
-      expectedDeltaG: (json['expected_delta_g'] as num).toDouble(),
-      expectedGMax: (json['expected_g_max'] as num).toDouble(),
-      price: (json['price'] as num).toDouble(),
-      shippingFee: (json['shipping_fee'] as num).toDouble(),
-      nutrition: Map<String, dynamic>.from(json['nutrition']),
-      ingredients: json['ingredients'],
-      allergies: json['allergy'],
+      foodName: json['food_name'] ?? '',
+      foodGroup: json['food_group'] ?? '',
+      expectedDeltaG: (json['expected_delta_g'] as num?)?.toDouble() ?? 0.0,
+      expectedGMax: (json['expected_g_max'] as num?)?.toDouble() ?? 0.0,
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      shippingFee: (json['shipping_fee'] as num?)?.toDouble() ?? 0.0,
+      nutrition: json['nutrition'] != null ? Map<String, dynamic>.from(json['nutrition']) : {},
+      ingredients: json['ingredients'] ?? '',
+      allergies: json['allergy'] ?? '',
     );
   }
 }
