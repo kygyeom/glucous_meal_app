@@ -7,6 +7,49 @@ import 'privacy_policy_screen.dart';
 import 'account_settings_screen.dart';
 import 'edit_profile_dialogs.dart';
 
+// Static mapping constants moved outside class for better performance
+const _genderDisplayToDB = {
+  '남성': 'male',
+  '여성': 'female',
+};
+const _genderDbToDisplay = {
+  'male': '남성',
+  'female': '여성',
+};
+
+const _activityDisplayToDB = {
+  '낮음': 'low',
+  '보통': 'medium',
+  '높음': 'high',
+};
+const _activityDbToDisplay = {
+  'low': '낮음',
+  'medium': '보통',
+  'high': '높음',
+};
+
+const _goalDisplayToDB = {
+  '혈당 조절': 'blood_sugar_control',
+  '체중 감량': 'weight_loss',
+  '균형 잡힌 식단': 'balanced',
+};
+const _goalDbToDisplay = {
+  'blood_sugar_control': '혈당 조절',
+  'weight_loss': '체중 감량',
+  'balanced': '균형 잡힌 식단',
+};
+
+const _diabetesDisplayToDB = {
+  '당뇨 없음': 'none',
+  '1형 당뇨': 'T1D',
+  '2형 당뇨': 'T2D',
+};
+const _diabetesDbToDisplay = {
+  'none': '당뇨 없음',
+  'T1D': '1형 당뇨',
+  'T2D': '2형 당뇨',
+};
+
 /// 검색결과 상세와 같은 '틀' 안에 끼워 넣는 **내용 전용 위젯** (Scaffold 없음)
 class UserProfileDetail extends StatefulWidget {
   final UserProfile? userProfile;
@@ -29,14 +72,12 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
   void initState() {
     super.initState();
     _currentProfile = widget.userProfile;
-    print("🎨 UserProfileDetail initState: profile=${widget.userProfile}");
   }
 
   @override
   void didUpdateWidget(UserProfileDetail oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.userProfile != oldWidget.userProfile) {
-      print("🔄 UserProfileDetail didUpdateWidget: old=${oldWidget.userProfile}, new=${widget.userProfile}");
       setState(() {
         _currentProfile = widget.userProfile;
       });
@@ -254,17 +295,7 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
   }
 
   Future<void> _editGender() async {
-    // Map display names to database values
-    final displayToDB = {
-      '남성': 'male',
-      '여성': 'female',
-    };
-    final dbToDisplay = {
-      'male': '남성',
-      'female': '여성',
-    };
-
-    final currentDisplay = dbToDisplay[_currentProfile?.gender] ?? '남성';
+    final currentDisplay = _genderDbToDisplay[_currentProfile?.gender] ?? '남성';
 
     final result = await showDialog<String>(
       context: context,
@@ -276,7 +307,7 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
     );
 
     if (result != null) {
-      final dbValue = displayToDB[result];
+      final dbValue = _genderDisplayToDB[result];
       if (dbValue != null) {
         await _updateProfile({'gender': dbValue});
       }
@@ -312,18 +343,7 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
   }
 
   Future<void> _editActivityLevel() async {
-    final displayToDB = {
-      '낮음': 'low',
-      '보통': 'medium',
-      '높음': 'high',
-    };
-    final dbToDisplay = {
-      'low': '낮음',
-      'medium': '보통',
-      'high': '높음',
-    };
-
-    final currentDisplay = dbToDisplay[_currentProfile?.activityLevel] ?? '보통';
+    final currentDisplay = _activityDbToDisplay[_currentProfile?.activityLevel] ?? '보통';
 
     final result = await showDialog<String>(
       context: context,
@@ -335,7 +355,7 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
     );
 
     if (result != null) {
-      final dbValue = displayToDB[result];
+      final dbValue = _activityDisplayToDB[result];
       if (dbValue != null) {
         await _updateProfile({'activity_level': dbValue});
       }
@@ -343,18 +363,7 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
   }
 
   Future<void> _editGoal() async {
-    final displayToDB = {
-      '혈당 조절': 'blood_sugar_control',
-      '체중 감량': 'weight_loss',
-      '균형 잡힌 식단': 'balanced',
-    };
-    final dbToDisplay = {
-      'blood_sugar_control': '혈당 조절',
-      'weight_loss': '체중 감량',
-      'balanced': '균형 잡힌 식단',
-    };
-
-    final currentDisplay = dbToDisplay[_currentProfile?.goal] ?? '균형 잡힌 식단';
+    final currentDisplay = _goalDbToDisplay[_currentProfile?.goal] ?? '균형 잡힌 식단';
 
     final result = await showDialog<String>(
       context: context,
@@ -366,7 +375,7 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
     );
 
     if (result != null) {
-      final dbValue = displayToDB[result];
+      final dbValue = _goalDisplayToDB[result];
       if (dbValue != null) {
         await _updateProfile({'goal': dbValue});
       }
@@ -374,18 +383,7 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
   }
 
   Future<void> _editDiabetes() async {
-    final displayToDB = {
-      '당뇨 없음': 'none',
-      '1형 당뇨': 'T1D',
-      '2형 당뇨': 'T2D',
-    };
-    final dbToDisplay = {
-      'none': '당뇨 없음',
-      'T1D': '1형 당뇨',
-      'T2D': '2형 당뇨',
-    };
-
-    final currentDisplay = dbToDisplay[_currentProfile?.diabetes] ?? '당뇨 없음';
+    final currentDisplay = _diabetesDbToDisplay[_currentProfile?.diabetes] ?? '당뇨 없음';
 
     final result = await showDialog<String>(
       context: context,
@@ -397,7 +395,7 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
     );
 
     if (result != null) {
-      final dbValue = displayToDB[result];
+      final dbValue = _diabetesDisplayToDB[result];
       if (dbValue != null) {
         await _updateProfile({'diabetes': dbValue});
       }
@@ -443,53 +441,58 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
   }) {
     final t = Theme.of(context).textTheme;
     final c = Theme.of(context).colorScheme;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: c.outlineVariant.withOpacity(0.35)),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(label, style: t.labelMedium?.copyWith(color: c.outline)),
-                  const SizedBox(height: 6),
-                  Text(
-                    value,
-                    style: t.titleLarge?.copyWith(fontWeight: FontWeight.w600),
-                  ),
-                ],
+    return RepaintBoundary(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: c.outlineVariant.withOpacity(0.35)),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(label, style: t.labelMedium?.copyWith(color: c.outline)),
+                    const SizedBox(height: 6),
+                    Text(
+                      value,
+                      style: t.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            IconButton(
-              onPressed: onEdit,
-              icon: const Icon(Icons.edit_outlined),
-              tooltip: '$label 수정',
-            ),
-          ],
+              if (onEdit != null)
+                IconButton(
+                  onPressed: onEdit,
+                  icon: const Icon(Icons.edit_outlined),
+                  tooltip: '$label 수정',
+                ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  ListTile _actionTile(
+  Widget _actionTile(
     BuildContext context, {
     required String title,
     required IconData icon,
     required VoidCallback onTap,
   }) {
     final t = Theme.of(context).textTheme;
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title, style: t.bodyLarge),
-      trailing: const Icon(Icons.chevron_right),
-      onTap: onTap,
+    return RepaintBoundary(
+      child: ListTile(
+        leading: Icon(icon),
+        title: Text(title, style: t.bodyLarge),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: onTap,
+      ),
     );
   }
 

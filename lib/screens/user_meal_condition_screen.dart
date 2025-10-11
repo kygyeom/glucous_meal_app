@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:glucous_meal_app/models/models.dart';
-import 'package:glucous_meal_app/services/api_service.dart';
-// import 'meal_recommendation_screen.dart';
 import 'food_search_test_screen.dart';
 import 'glucous_loading_screen.dart';
 

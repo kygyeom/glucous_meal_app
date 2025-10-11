@@ -20,35 +20,24 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _checkAuthentication() async {
     try {
-      print("🚀 Splash Screen: Checking authentication...");
-
-      // Small delay for splash screen visibility
       await Future.delayed(const Duration(seconds: 1));
 
-      // Check if user exists
       final userExists = await ApiService.checkUserExists();
 
       if (!mounted) return;
 
       if (userExists) {
-        print("✅ User exists, navigating to main page");
-
-        // Get user profile to get the name
         final profile = await ApiService.fetchUserProfile();
         final username = profile?.name ?? 'User';
 
         if (!mounted) return;
 
-        // Navigate to main page
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => main_screen.Main(username: username),
           ),
         );
       } else {
-        print("⚠️ User does not exist, navigating to onboarding");
-
-        // Navigate to onboarding
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => OnboardingScreen(),
@@ -56,11 +45,8 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       }
     } catch (e) {
-      print("❌ Error during authentication check: $e");
-
       if (!mounted) return;
 
-      // On error, go to onboarding to be safe
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => OnboardingScreen(),
@@ -80,24 +66,28 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               // 중앙 로고 + 텍스트
               Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/glucous_logo.png',
-                      width: 120,
-                      height: 120,
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'GlucoUS',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
+                child: RepaintBoundary(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/glucous_logo.png',
+                        width: 120,
+                        height: 120,
+                        cacheWidth: 360, // 120 * 3 for 3x density
+                        cacheHeight: 360,
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 16),
+                      const Text(
+                        'GlucoUS',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
@@ -106,7 +96,9 @@ class _SplashScreenState extends State<SplashScreen> {
                 bottom: 32,
                 left: 0,
                 right: 0,
-                child: SpinKitCircle(color: Color(0xFF00FFD1), size: 36.0),
+                child: RepaintBoundary(
+                  child: SpinKitCircle(color: Color(0xFF00FFD1), size: 36.0),
+                ),
               ),
             ],
           ),

@@ -1,8 +1,12 @@
 from typing import List, Dict, Any
 import re
+import base64
+import json
+import traceback
 from os import getenv
+from io import BytesIO
 
-from fastapi import FastAPI, Header, Query, HTTPException
+from fastapi import FastAPI, Header, Query, HTTPException, File, UploadFile
 from fastapi.responses import JSONResponse
 import requests
 from pydantic import BaseModel
@@ -10,6 +14,8 @@ import joblib
 import pandas as pd
 from mysql import connector
 from dotenv import load_dotenv
+import google.generativeai as genai
+from PIL import Image
 
 from query import build_food_query, build_food_allergy_query
 from model import load_model_normalizer, predict_dict, load_model
@@ -83,8 +89,28 @@ class PredictGlucoseResponse(BaseModel):
     delta_glucose: float
     average_glucose: float
 
+class FoodItem(BaseModel):
+    food_name: str
+    description: str
+    estimated_nutrition: Dict[str, Any]
+    confidence: str
+
+class ImageAnalysisResponse(BaseModel):
+    foods: List[FoodItem]
+    total_nutrition: Dict[str, Any]
+
 
 load_dotenv()
+# Gemini API key (add to .env file: GEMINI_API_KEY=your_key_here)
+GEMINI_API_KEY = getenv('GEMINI_API_KEY', '')
+
+# Configure Google Generative AI
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+    print(f"✅ Google Generative AI configured with API key")
+else:
+    print("⚠️ Warning: GEMINI_API_KEY not found in environment variables")
+
 DB_CONFIG = {
     'host': getenv('DB_HOST'),
     'user': getenv('DB_USER'),
@@ -916,3 +942,199 @@ def get_food_detail(food_id: str = Query(...)):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"food detail error: {e}")
+
+
+# ===================== Gemini Image Processing =====================
+
+async def analyze_food_image_with_gemini(image_bytes: bytes) -> ImageAnalysisResponse:
+    """
+    Analyze a food image using Google Gemini API (via official SDK) and extract food name,
+    description, and estimated nutrition information.
+    """
+    print(f"🔍 Starting Gemini image analysis with SDK...")
+    print(f"📊 Image size: {len(image_bytes)} bytes")
+
+    if not GEMINI_API_KEY:
+        print("❌ Gemini API key not configured!")
+        raise HTTPException(status_code=500, detail="Gemini API key not configured")
+
+    print(f"✅ API Key configured")
+
+    try:
+        # Load image from bytes using PIL
+        image = Image.open(BytesIO(image_bytes))
+        print(f"✅ Image loaded: {image.format} {image.size}")
+
+        # Initialize Gemini model
+        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        print(f"✅ Model initialized: gemini-2.0-flash-exp")
+
+        # Create prompt for structured JSON response (Korean output, multiple foods)
+        prompt = """이 이미지에 있는 모든 음식을 분석하세요. 이미지에 여러 음식이 있다면 각각을 구별하여 개별 음식 항목으로 나열하세요.
+
+예를 들어:
+- 밥과 김치가 있으면 → 2개의 음식 항목 (밥, 김치)
+- 비빔밥 한 그릇만 있으면 → 1개의 음식 항목 (비빔밥)
+- 삼겹살, 밥, 김치, 된장찌개가 있으면 → 4개의 음식 항목
+
+각 음식에 대해 다음 정보를 제공하세요:
+1. 음식 이름 (구체적으로)
+2. 간단한 설명 (1문장)
+3. 해당 음식의 1회 제공량당 예상 영양 정보
+4. 신뢰도 수준 (high/medium/low)
+
+모든 텍스트는 한국어로 작성해주세요. JSON 형식으로만 응답하고, 마크다운 코드 블록은 사용하지 마세요:
+{
+  "foods": [
+    {
+      "food_name": "흰쌀밥",
+      "description": "한국의 주식으로 탄수화물이 풍부합니다",
+      "estimated_nutrition": {
+        "calories_kcal": 210,
+        "carbohydrate_g": 45,
+        "protein_g": 4,
+        "fat_g": 0.5,
+        "sugar_g": 0,
+        "fiber_g": 0.5,
+        "sodium_mg": 2
+      },
+      "confidence": "high"
+    },
+    {
+      "food_name": "배추김치",
+      "description": "한국의 전통 발효 음식입니다",
+      "estimated_nutrition": {
+        "calories_kcal": 15,
+        "carbohydrate_g": 3,
+        "protein_g": 1,
+        "fat_g": 0.3,
+        "sugar_g": 2,
+        "fiber_g": 1.5,
+        "sodium_mg": 500
+      },
+      "confidence": "high"
+    }
+  ]
+}"""
+
+        print("📤 Sending request to Gemini API via SDK...")
+
+        # Generate content with the image
+        response = model.generate_content([prompt, image])
+
+        print(f"✅ Received response from Gemini")
+
+        # Extract the generated text
+        generated_text = response.text
+        print(f"📝 Generated text: {generated_text[:200]}...")
+
+        # Parse JSON from the response (remove markdown code blocks if present)
+        generated_text = generated_text.strip()
+        if generated_text.startswith("```json"):
+            generated_text = generated_text[7:]
+        if generated_text.startswith("```"):
+            generated_text = generated_text[3:]
+        if generated_text.endswith("```"):
+            generated_text = generated_text[:-3]
+        generated_text = generated_text.strip()
+
+        print(f"🔧 Cleaned text for parsing: {generated_text[:200]}...")
+
+        analysis = json.loads(generated_text)
+        print(f"✅ Parsed JSON successfully")
+
+        # Extract foods list
+        foods_data = analysis.get("foods", [])
+        print(f"🍽️ Detected {len(foods_data)} food items")
+
+        # Create FoodItem objects
+        foods = []
+        for food_data in foods_data:
+            print(f"   - {food_data.get('food_name', 'Unknown')}")
+            foods.append(FoodItem(
+                food_name=food_data.get("food_name", "Unknown Food"),
+                description=food_data.get("description", ""),
+                estimated_nutrition=food_data.get("estimated_nutrition", {}),
+                confidence=food_data.get("confidence", "low")
+            ))
+
+        # Calculate total nutrition by summing all foods
+        total_nutrition = {
+            "calories_kcal": 0.0,
+            "carbohydrate_g": 0.0,
+            "protein_g": 0.0,
+            "fat_g": 0.0,
+            "sugar_g": 0.0,
+            "fiber_g": 0.0,
+            "sodium_mg": 0.0
+        }
+
+        for food in foods:
+            nutrition = food.estimated_nutrition
+            for key in total_nutrition.keys():
+                total_nutrition[key] += nutrition.get(key, 0.0)
+
+        print(f"📊 Total nutrition calculated:")
+        print(f"   Calories: {total_nutrition['calories_kcal']} kcal")
+        print(f"   Carbs: {total_nutrition['carbohydrate_g']} g")
+        print(f"   Protein: {total_nutrition['protein_g']} g")
+        print(f"   Fat: {total_nutrition['fat_g']} g")
+
+        return ImageAnalysisResponse(
+            foods=foods,
+            total_nutrition=total_nutrition
+        )
+
+    except json.JSONDecodeError as e:
+        print(f"❌ JSON parsing error: {e}")
+        print(f"❌ Text that failed to parse: {generated_text if 'generated_text' in locals() else 'N/A'}")
+        raise HTTPException(status_code=500, detail=f"JSON parsing error: {str(e)}")
+    except Exception as e:
+        print(f"❌ Error analyzing image: {str(e)}")
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Error analyzing image: {str(e)}")
+
+
+@app.post("/analyze-image", response_model=ImageAnalysisResponse)
+async def analyze_image(image: UploadFile = File(...)):
+    """
+    Upload a food image and get AI-powered analysis including:
+    - Food name identification
+    - Description
+    - Estimated nutrition information
+    - Confidence level
+    """
+    print(f"\n{'='*60}")
+    print(f"📸 New image analysis request")
+    print(f"📁 Filename: {image.filename}")
+    print(f"📦 Content type: {image.content_type}")
+    print(f"{'='*60}\n")
+
+    try:
+        # Read image bytes
+        image_bytes = await image.read()
+        print(f"✅ Image loaded: {len(image_bytes)} bytes")
+
+        # Analyze with Gemini
+        result = await analyze_food_image_with_gemini(image_bytes)
+
+        print(f"\n{'='*60}")
+        print(f"✅ Analysis complete!")
+        print(f"🍽️ Detected {len(result.foods)} food items:")
+        for food in result.foods:
+            print(f"   - {food.food_name} (confidence: {food.confidence})")
+        print(f"📊 Total Nutrition:")
+        print(f"   Calories: {result.total_nutrition['calories_kcal']} kcal")
+        print(f"   Carbs: {result.total_nutrition['carbohydrate_g']} g")
+        print(f"   Protein: {result.total_nutrition['protein_g']} g")
+        print(f"   Fat: {result.total_nutrition['fat_g']} g")
+        print(f"{'='*60}\n")
+
+        return result
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"❌ Image upload error: {str(e)}")
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Image upload error: {str(e)}")

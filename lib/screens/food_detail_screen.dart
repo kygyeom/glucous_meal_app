@@ -278,9 +278,7 @@ class _FoodDetailBodyState extends State<_FoodDetailBody> {
 
   /// 음식 이름으로 대체 이미지(HTTPS, hotlink 허용)
   String _fallbackImageFor(String query) {
-    final q = Uri.encodeComponent(
-      (query.isEmpty ? 'food' : query) + ',food,meal,plate',
-    );
+    final q = Uri.encodeComponent('${query.isEmpty ? 'food' : query},food,meal,plate');
     return 'https://source.unsplash.com/512x512/?$q';
   }
 
@@ -365,7 +363,7 @@ class _Header extends StatelessWidget {
             width: 84,
             height: 84,
             child: (imageUrl == null || imageUrl!.isEmpty)
-                ? _ImagePlaceholder()
+                ? const _ImagePlaceholder()
                 : Image.network(
                     imageUrl!,
                     fit: BoxFit.cover,
@@ -409,6 +407,8 @@ class _Header extends StatelessWidget {
 }
 
 class _ImagePlaceholder extends StatelessWidget {
+  const _ImagePlaceholder();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -492,27 +492,29 @@ class _MetricPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFE3E8EF)),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x08000000),
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-          const SizedBox(width: 8),
-          Text(value, style: const TextStyle(color: Colors.black87)),
-        ],
+    return RepaintBoundary(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: const Color(0xFFE3E8EF)),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x08000000),
+              blurRadius: 6,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(width: 8),
+            Text(value, style: const TextStyle(color: Colors.black87)),
+          ],
+        ),
       ),
     );
   }
@@ -546,12 +548,14 @@ class _ChipsSection extends StatelessWidget {
             runSpacing: 8,
             children: chips
                 .map(
-                  (c) => Chip(
-                    label: Text(c),
-                    backgroundColor: const Color(0xFFF7F9FB),
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: Color(0xFFE3E8EF)),
-                      borderRadius: BorderRadius.circular(20),
+                  (c) => RepaintBoundary(
+                    child: Chip(
+                      label: Text(c),
+                      backgroundColor: const Color(0xFFF7F9FB),
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: Color(0xFFE3E8EF)),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
                   ),
                 )
@@ -1043,14 +1047,6 @@ class _FoodDetailBodyState extends State<_FoodDetailBody> {
     if (fiber != null && fiber >= 5) result.add('고섬유');
     if (sodium != null && sodium <= 140) result.add('저나트륨');
 
-    // 재료 키워드로 추가 시사점 (확정 불가이므로 보수적으로)
-    final ingText = ingredients.join(' ').toLowerCase();
-    bool notContainsAny(List<String> keys) =>
-        !keys.any((k) => ingText.contains(k));
-
-    // dairy-free 추정: 우유/치즈/버터 키워드가 없으면 굳이 단정하지 않음 → 패스
-    // vegan/vegetarian도 보수적으로 패스
-
     return result.toList()..sort();
   }
 
@@ -1067,9 +1063,7 @@ class _FoodDetailBodyState extends State<_FoodDetailBody> {
 
   /// 음식 이름으로 대체 이미지(HTTPS, hotlink 허용)
   String _fallbackImageFor(String query) {
-    final q = Uri.encodeComponent(
-      (query.isEmpty ? 'food' : query) + ',food,meal,plate',
-    );
+    final q = Uri.encodeComponent('${query.isEmpty ? 'food' : query},food,meal,plate');
     return 'https://source.unsplash.com/512x512/?$q';
   }
 
@@ -1119,15 +1113,24 @@ class _Content extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _Header(foodName: foodName, foodId: foodId, imageUrl: imageUrl),
+          RepaintBoundary(
+            child: _Header(foodName: foodName, foodId: foodId, imageUrl: imageUrl),
+          ),
           const SizedBox(height: 16),
-          if (nutrition.isNotEmpty) _NutritionCard(nutrition: nutrition),
+          if (nutrition.isNotEmpty)
+            RepaintBoundary(
+              child: _NutritionCard(nutrition: nutrition),
+            ),
           if (nutrition.isNotEmpty) const SizedBox(height: 16),
           if (ingredients.isNotEmpty)
-            _ChipsSection(title: "Ingredients", chips: ingredients),
+            RepaintBoundary(
+              child: _ChipsSection(title: "Ingredients", chips: ingredients),
+            ),
           if (ingredients.isNotEmpty) const SizedBox(height: 16),
           if (restrictions.isNotEmpty)
-            _ChipsSection(title: "Constraints", chips: restrictions),
+            RepaintBoundary(
+              child: _ChipsSection(title: "Constraints", chips: restrictions),
+            ),
         ],
       ),
     );
@@ -1154,7 +1157,7 @@ class _Header extends StatelessWidget {
             width: 84,
             height: 84,
             child: (imageUrl == null || imageUrl!.isEmpty)
-                ? _ImagePlaceholder()
+                ? const _ImagePlaceholder()
                 : Image.network(
                     imageUrl!,
                     fit: BoxFit.cover,
@@ -1198,6 +1201,8 @@ class _Header extends StatelessWidget {
 }
 
 class _ImagePlaceholder extends StatelessWidget {
+  const _ImagePlaceholder();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1281,27 +1286,29 @@ class _MetricPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFE3E8EF)),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x08000000),
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-          const SizedBox(width: 8),
-          Text(value, style: const TextStyle(color: Colors.black87)),
-        ],
+    return RepaintBoundary(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: const Color(0xFFE3E8EF)),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x08000000),
+              blurRadius: 6,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(width: 8),
+            Text(value, style: const TextStyle(color: Colors.black87)),
+          ],
+        ),
       ),
     );
   }
@@ -1335,12 +1342,14 @@ class _ChipsSection extends StatelessWidget {
             runSpacing: 8,
             children: chips
                 .map(
-                  (c) => Chip(
-                    label: Text(c),
-                    backgroundColor: const Color(0xFFF7F9FB),
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: Color(0xFFE3E8EF)),
-                      borderRadius: BorderRadius.circular(20),
+                  (c) => RepaintBoundary(
+                    child: Chip(
+                      label: Text(c),
+                      backgroundColor: const Color(0xFFF7F9FB),
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: Color(0xFFE3E8EF)),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
                   ),
                 )

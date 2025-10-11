@@ -92,7 +92,7 @@ List<Map<String, String>> _decodeFoodPairs(String body) {
 }
 
 class ApiService {
-  static const String baseUrl = 'http://127.0.0.1:8000'; // 로컬 서버 주소
+  static const String baseUrl = 'http://172.21.107.224:8000'; // PC IP 주소 (Android 기기용)
   static final http.Client _client = http.Client();
 
   // 공통 헤더
@@ -239,6 +239,7 @@ class ApiService {
       print("✅ 유저 등록 성공");
     } else {
       print("❌ 등록 실패: ${response.body}");
+      throw Exception('사용자 등록에 실패했습니다. 서버 응답: ${response.statusCode}');
     }
   }
 
